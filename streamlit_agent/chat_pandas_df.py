@@ -30,19 +30,23 @@ prefix_text = '''너는 노트북을 전문적으로 추천해주는 챗봇 Pick
 항상 한글로 답변을 작성해. 외부링크를 작성하면 안되.
 단 질문에 대한 데이터프레임에 적용하는 코드는 아래와 같이 작성해야해.
 질문: 화면좋고 빠르고 가벼운 노트북 골라줘
-코드: df['Gram_per_Inch'] = (df['무게(kg)'] / df['inch'])*1000
-df_filtered = df[(df['ppi'] > df['ppi'].median()) & (df['Screen_Brightness'] > df['Screen_Brightness'].median()) & (df['CPU_Score'] > df['CPU_Score'].median()) & df['Gram_per_Inch'] < df['Gram_per_Inch'].median())]
+코드: df['inch_per_kg'] = df['inch'] / df['무게(kg)']
+df_filtered = df[(df['ppi'] > df['ppi'].median()) & (df['Screen_Brightness'] > df['Screen_Brightness'].median()) & (df['CPU_Score'] > df['CPU_Score'].median()) & (df['inch_per_kg'] > df['inch_per_kg'].median())]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True)
 df_sorted.head(5)
 질문: 아주 가볍고 가성비 좋은 걸로 골라줘
-코드: df['Gram_per_Inch'] = (df['무게(kg)'] / df['inch'])*1000
-df_filtered = df[(df['Gram_per_Inch'] < df['Gram_per_Inch'].quantile(0.25)) & df['Value_for_Money_Point'] > df['Value_for_Money_Point'].median())]
+코드: df['inch_per_kg'] = df['inch'] / df['무게(kg)']
+df_filtered = df[(df['inch_per_kg'] > df['inch_per_kg'].quantile(0.75)) & (df['Value_for_Money_Point'] > df['Value_for_Money_Point'].median())]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True)
 df_sorted.head(5)
 질문: 가볍고 성능이 아주 뛰어난걸로 부탁해
-코드: df['Gram_per_Inch'] = (df['무게(kg)'] / df['inch'])*1000
-df_filtered = df['Gram_per_Inch'] < df['Gram_per_Inch'].median()) & (df['CPU_Score'] > df['CPU_Score'].quantile(0.75)) & (df['GPU_Score'] > df['GPU_Score'].quantile(0.75))]
+코드: df['inch_per_kg'] = df['inch'] / df['무게(kg)']
+df_filtered = df[(df['inch_per_kg'] > df['inch_per_kg'].median()) & (df['CPU_Score'] > df['CPU_Score'].quantile(0.75)) & (df['GPU_Score'] > df['GPU_Score'].quantile(0.75))]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True)
+df_sorted.head(5)
+질문: as 잘되는 노트북이 필요해
+코드: df_filtered = df[df['Manufacturer'].isin(['SAMSUNG', 'LG'])]
+df_sorted = df_filtered.sort_values(by=['Value_for_Money_Point', 'Price_won'], ascending=[False, True])
 df_sorted.head(5)
 '''
 
