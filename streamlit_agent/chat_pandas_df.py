@@ -1,10 +1,20 @@
 from langchain.agents import AgentType
 from langchain.agents import create_pandas_dataframe_agent
 from langchain.callbacks import StreamlitCallbackHandler
+from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import ChatOpenAI
+from langchain.schema import AIMessage, HumanMessage, SystemMessage
+from streamlit_chat import message
+
 import streamlit as st
 import pandas as pd
 import os
+os.environ["OPENAI_API_KEY"] = "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"
+
+df = pd.read_csv("/content/laptop_sdf_231013.csv")
+#df = df.astype(str)
+df.pop('Unnamed: 0')
+#df
 
 file_formats = {
     "csv": pd.read_csv,
@@ -52,30 +62,40 @@ def load_data(uploaded_file):
         st.error(f"Unsupported file format: {ext}")
         return None
 
+class StreamHandler(BaseCallbackHandler):
+    def __init__(self, container, initial_text=""):
+        self.container = container
+        self.text=initial_text
+    def on_llm_new_token(self, token: str, **kwargs) -> None:
+        # "/" is a marker to show difference 
+        # you don't need it 
+        self.text+=token+"/" 
+        self.container.markdown(self.text) 
+
 # Streamlit 페이지 설정
 st.set_page_config(page_title="LangChain: Chat with pandas DataFrame", page_icon="🦜")
 st.title("🦜 LangChain: Chat with pandas DataFrame")
 
-# 파일 업로드 위젯을 생성합니다.
-uploaded_file = st.file_uploader(
-    "Upload a Data file",
-    type=list(file_formats.keys()),
-    help="Various File formats are Support",
-    on_change=clear_submit,
-)
+# # 파일 업로드 위젯을 생성합니다.
+# uploaded_file = st.file_uploader(
+#     "Upload a Data file",
+#     type=list(file_formats.keys()),
+#     help="Various File formats are Support",
+#     on_change=clear_submit,
+# )
 
-# 파일이 업로드되지 않았을 때 경고 메시지를 표시합니다.
-if not uploaded_file:
-    st.warning(
-        "This app uses LangChain's `PythonAstREPLTool` which is vulnerable to arbitrary code execution. Please use caution in deploying and sharing this app."
-    )
+# # 파일이 업로드되지 않았을 때 경고 메시지를 표시합니다.
+# if not uploaded_file:
+#     st.warning(
+#         "This app uses LangChain's `PythonAstREPLTool` which is vulnerable to arbitrary code execution. Please use caution in deploying and sharing this app."
+#     )
 
-# 파일이 업로드된 경우 데이터를 로드합니다.
-if uploaded_file:
-    df = load_data(uploaded_file)
+# # 파일이 업로드된 경우 데이터를 로드합니다.
+# if uploaded_file:
+#     df = load_data(uploaded_file)
 
-# OpenAI API 키 입력을 받습니다.
-openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
+# # OpenAI API 키 입력을 받습니다.
+# openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 
 # 대화 기록을 초기화하거나 버튼을 눌러 대화 기록을 삭제합니다.
 if "messages" not in st.session_state or st.sidebar.button("Clear conversation history"):
@@ -91,10 +111,10 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
 
-    # OpenAI 모델 설정 및 실행
-    if not openai_api_key:
-        st.info("Please add your OpenAI API key to continue.")
-        st.stop()
+    # # OpenAI 모델 설정 및 실행
+    # if not openai_api_key:
+    #     st.info("Please add your OpenAI API key to continue.")
+    #     st.stop()
 
     # ChatOpenAI 모델 초기화 및 설정
     llm = ChatOpenAI(
@@ -113,12 +133,21 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
 
     # Assistant 역할로 채팅 메시지를 표시합니다.
     with st.chat_message("assistant"):
+        
+        st.markdown("### streaming box")
+        # here is the key, setup a empty container first
+        chat_box=st.empty() 
+        stream_handler = StreamHandler(chat_box)
+        # chat = ChatOpenAI(max_tokens=25, streaming=True, callbacks=[stream_handler])
+        st.markdown("### together box")  
+
         # Streamlit 콜백 핸들러를 생성합니다.
         st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
         
         # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
-        response = pandas_df_agent.run(st.session_state.messages, callbacks=[st_cb])
+        response = pandas_df_agent.run(st.session_state.messages, callbacks=[st_cb, stream_handler])
         
         # Assistant의 응답을 대화 기록에 추가하고 출력합니다.
         st.session_state.messages.append({"role": "assistant", "content": response})
         st.write(response)
+        st.markdown(response)
