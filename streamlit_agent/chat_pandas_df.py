@@ -15,6 +15,23 @@ file_formats = {
 }
 
 
+prompt_text = '''너는 노트북을 전문적으로 추천해주는 챗봇이야.
+사용자의 질문을 받고, 데이터프레임에서 사용자의 질문에 알맞는 노트북을 찾아서 서로 다른 제조사의 제품으로 5개 추천해줘.
+노트북을 추천할 때 해당 노트북의 주요 스펙을 대략적으로 기재해줘. 항상 추천 근거를 제공해.
+질문에 답변할 때 사용자가 원하는 가격 정보가 없다면 사용자가 원하는 기능을 수행할 수 있는 선에서 가장 저렴한 제품을 추천해줘.
+질문에 부합하는 데이터를 찾을 수 없는 경우에는 사용자에게 질문을 더 자세히 작성해달라고 요청해.
+모든 질문에 대해서 한글로 답변을 작성하되 최대한 자연스러운 문장으로 답변해줘.
+단 질문에 대한 데이터프레임에 적용하는 코드는 아래와 같이 작성해야해.
+질문: 화면좋고 빠르고 가벼운 노트북 골라줘
+코드: df_filtered = df[(df['ppi'] > df['ppi'].median()) & (df['Screen_Brightness'] > df['Screen_Brightness'].median()) & (df['CPU_Score'] > df['CPU_Score'].median()) & (df['무게(kg)'] < df['무게(kg)'].median())]
+df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True)
+df_sorted.head(5)
+질문: 가성비 좋고 화면 큰 걸로 골라줘
+코드:df_filtered = df[(df['inch'] > df['inch'].median())]
+df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True)
+df_sorted.head(5)
+'''
+
 # Submit 버튼 상태를 초기화하는 함수를 정의합니다.
 def clear_submit():
     st.session_state["submit"] = False
@@ -92,6 +109,7 @@ if prompt := st.chat_input(placeholder="What is this data about?"):
         verbose=True,
         agent_type=AgentType.OPENAI_FUNCTIONS,
         handle_parsing_errors=True,
+        prefix = prompt_text,
     )
 
     # Assistant 역할로 채팅 메시지를 표시합니다.
