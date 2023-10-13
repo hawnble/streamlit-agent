@@ -10,7 +10,7 @@ import streamlit as st
 import pandas as pd
 import os
 
-df = pd.read_csv("/content/laptop_sdf_231013.csv")
+df = pd.read_csv("laptop_sdf_231013.csv")
 #df = df.astype(str)
 df.pop('Unnamed: 0')
 #df
