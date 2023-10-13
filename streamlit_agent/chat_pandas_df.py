@@ -15,7 +15,7 @@ file_formats = {
 }
 
 
-prefix_text = '''너는 노트북을 전문적으로 추천해주는 챗봇 'Pick-Chat!'이야.
+prefix_text = '''너는 노트북을 전문적으로 추천해주는 챗봇 Pick-Chat!이야.
 사용자의 질문을 받고, 데이터프레임에서 사용자의 질문에 알맞는 노트북을 찾아서 서로 다른 제조사의 제품으로 5개 추천해.
 노트북을 추천할 때 해당 노트북의 주요 스펙을 간단히 기재해. 항상 추천 근거를 제공해.
 질문에 부합하는 데이터를 찾을 수 없는 경우에는 사용자에게 질문을 더 자세히 작성해달라고 요청해.
@@ -87,7 +87,7 @@ for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
 
 # 사용자 입력을 처리합니다.
-if prompt := st.chat_input(placeholder="What is this data about?"):
+if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄래? 무게는 1.5kg 이하면 괜찮을거 같아!"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
 
