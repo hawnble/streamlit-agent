@@ -4,7 +4,7 @@ from langchain.callbacks import StreamlitCallbackHandler
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
-from streamlit_chat import message
+#from streamlit_chat import message
 
 import streamlit as st
 import pandas as pd
