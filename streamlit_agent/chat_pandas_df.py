@@ -9,7 +9,6 @@ from streamlit_chat import message
 import streamlit as st
 import pandas as pd
 import os
-os.environ["OPENAI_API_KEY"] = "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"
 
 df = pd.read_csv("/content/laptop_sdf_231013.csv")
 #df = df.astype(str)
