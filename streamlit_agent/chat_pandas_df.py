@@ -1,8 +1,3 @@
-!python -m pip install langchain
-!pip install openai
-!pip install -q streamlit
-!pip install streamlit-chat
-
 from langchain.agents import AgentType
 from langchain.agents import create_pandas_dataframe_agent
 from langchain.callbacks import StreamlitCallbackHandler
