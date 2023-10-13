@@ -93,8 +93,8 @@ st.title("🦜 LangChain: Chat with pandas DataFrame")
 # if uploaded_file:
 #     df = load_data(uploaded_file)
 
-# # OpenAI API 키 입력을 받습니다.
-# openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
+# OpenAI API 키 입력을 받습니다.
+openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 
 # 대화 기록을 초기화하거나 버튼을 눌러 대화 기록을 삭제합니다.
 if "messages" not in st.session_state or st.sidebar.button("Clear conversation history"):
@@ -110,10 +110,10 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
 
-    # # OpenAI 모델 설정 및 실행
-    # if not openai_api_key:
-    #     st.info("Please add your OpenAI API key to continue.")
-    #     st.stop()
+    # OpenAI 모델 설정 및 실행
+    if not openai_api_key:
+        st.info("Please add your OpenAI API key to continue.")
+        st.stop()
 
     # ChatOpenAI 모델 초기화 및 설정
     llm = ChatOpenAI(
