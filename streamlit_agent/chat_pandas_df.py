@@ -44,9 +44,10 @@ df_sorted.head(5)
 df_filtered = df[(df['inch_per_kg'] > df['inch_per_kg'].median()) & (df['CPU_Score'] > df['CPU_Score'].quantile(0.75)) & (df['GPU_Score'] > df['GPU_Score'].quantile(0.75))]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True)
 df_sorted.head(5)
-질문: as 잘되는 노트북이 필요해
-코드: df_filtered = df[df['Manufacturer'].isin(['SAMSUNG', 'LG'])]
-df_sorted = df_filtered.sort_values(by=['Value_for_Money_Point', 'Price_won'], ascending=[False, True])
+질문: as도 잘되고 성능도 훌륭한 제품은 어떤게 있니?
+코드: df_AS = df[df['Manufacturer'].isin(['SAMSUNG', 'LG'])]
+df_filtered = df_AS[(df_AS['CPU_Score'] > df_AS['CPU_Score'].median()) & (df_AS['GPU_Score'] > df_AS['GPU_Score'].median())]
+df_sorted = df_filtered.sort_values(by=['Value_Point', 'Price_won'], ascending=[False, True])
 df_sorted.head(5)
 '''
 
