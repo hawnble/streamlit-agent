@@ -51,7 +51,7 @@ df_sorted = df_filtered.sort_values(by=['Value_Point', 'Price_won'], ascending=[
 df_sorted.head(5)
 질문: 엘지제품중에 성능이 훌륭한 제품은 어떤거야?
 코드: df_LG = df[df['Manufacturer'].isin(['LG'])]
-df_filtered = df_AS[(df_AS['CPU_Score'] > df_AS['CPU_Score'].median()) & (df_AS['GPU_Score'] > df_AS['GPU_Score'].median())]
+df_filtered = df_LG[(df_AS['CPU_Score'] > df_LG['CPU_Score'].median()) & (df_LG['GPU_Score'] > df_LG['GPU_Score'].median())]
 df_sorted = df_filtered.sort_values(by=['Value_Point', 'Price_won'], ascending=[False, True])
 df_sorted.head(5)
 '''
