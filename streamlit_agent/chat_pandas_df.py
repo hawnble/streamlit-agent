@@ -25,18 +25,24 @@ file_formats = {
 
 
 prefix_text = '''너는 노트북을 전문적으로 추천해주는 챗봇 Pick-Chat!이야.
-사용자의 질문을 받고, 데이터프레임에서 사용자의 질문에 알맞는 노트북을 찾아서 서로 다른 제조사의 제품으로 5개 추천해.
-항상 추천 근거를 간략히 제공해.
+항상 가격과 추천근거를 간략히 제공해. 제품마다 줄바꿈을 해줘.
 질문에 부합하는 데이터를 찾을 수 없는 경우에는 사용자에게 질문을 더 자세히 작성해달라고 요청해.
 항상 한글로 답변을 작성해. 외부링크를 작성하면 안되.
 단 질문에 대한 데이터프레임에 적용하는 코드는 아래와 같이 작성해야해.
 질문: 화면좋고 빠르고 가벼운 노트북 골라줘
-코드: df_filtered = df[(df['ppi'] > df['ppi'].median()) & (df['Screen_Brightness'] > df['Screen_Brightness'].median()) & (df['CPU_Score'] > df['CPU_Score'].median()) & (df['무게(kg)'] < df['무게(kg)'].median())]
-df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True)
-df_sorted.head(5)
-질문: 가성비 좋고 화면 큰 걸로 골라줘
-코드:df_filtered = df[(df['inch'] > df['inch'].median())]
+코드: df['Gram_per_Inch'] = (df['무게(kg)'] / df['inch'])*1000
+df_filtered = df[(df['ppi'] > df['ppi'].median()) & (df['Screen_Brightness'] > df['Screen_Brightness'].median()) & (df['CPU_Score'] > df['CPU_Score'].median()) & df['Gram_per_Inch'] < df['Gram_per_Inch'].median())]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True)
+df_sorted.head(5)
+질문: 아주 가볍고 가성비 좋은 걸로 골라줘
+코드: df['Gram_per_Inch'] = (df['무게(kg)'] / df['inch'])*1000
+df_filtered = df[(df['Gram_per_Inch'] < df['Gram_per_Inch'].quantile(0.25)) & df['Value_for_Money_Point'] > df['Value_for_Money_Point'].median())]
+df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True)
+df_sorted.head(5)
+질문: 가볍고 성능이 아주 뛰어난걸로 부탁해
+코드: df['Gram_per_Inch'] = (df['무게(kg)'] / df['inch'])*1000
+df_filtered = df['Gram_per_Inch'] < df['Gram_per_Inch'].median()) & (df['CPU_Score'] > df['CPU_Score'].quantile(0.75)) & (df['GPU_Score'] > df['GPU_Score'].quantile(0.75))]
+df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True)
 df_sorted.head(5)
 '''
 
@@ -66,10 +72,10 @@ class StreamHandler(BaseCallbackHandler):
         self.container = container
         self.text=initial_text
     def on_llm_new_token(self, token: str, **kwargs) -> None:
-        # "/" is a marker to show difference 
-        # you don't need it 
+        # "/" is a marker to show difference
+        # you don't need it
         self.text+=token
-        self.container.markdown(self.text) 
+        self.container.markdown(self.text)
 
 # Streamlit 페이지 설정
 st.set_page_config(page_title="LangChain: Chat with pandas DataFrame", page_icon="🦜")
@@ -132,20 +138,20 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
 
     # Assistant 역할로 채팅 메시지를 표시합니다.
     with st.chat_message("assistant"):
-        
+
         st.markdown("### Pick-Chat!")
         # here is the key, setup a empty container first
-        chat_box=st.empty() 
+        chat_box=st.empty()
         stream_handler = StreamHandler(chat_box)
         # chat = ChatOpenAI(max_tokens=25, streaming=True, callbacks=[stream_handler])
-        # st.markdown("### together box")  
+        # st.markdown("### together box")
 
         # Streamlit 콜백 핸들러를 생성합니다.
         # st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
-        
+
         # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
         response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler])
-        
+
         # Assistant의 응답을 대화 기록에 추가하고 출력합니다.
         st.session_state.messages.append({"role": "assistant", "content": response})
         # st.write(response)
