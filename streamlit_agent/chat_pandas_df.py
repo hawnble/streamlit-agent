@@ -33,27 +33,27 @@ prefix_text = '''너는 노트북을 전문적으로 추천해주는 챗봇 Pick
 코드: df['inch_per_kg'] = df['inch'] / df['무게(kg)']
 df_filtered = df[(df['ppi'] >= df['ppi'].median()) & (df['Screen_Brightness'] >= df['Screen_Brightness'].median()) & (df['CPU_Score'] >= df['CPU_Score'].median()) & (df['inch_per_kg'] >= df['inch_per_kg'].median())]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True)
-df_sorted.head(5)
+df_sorted.head(10)
 질문: 아주 가볍고 가성비 좋은 걸로 골라줘
 코드: df['inch_per_kg'] = df['inch'] / df['무게(kg)']
 df_filtered = df[(df['inch_per_kg'] >= df['inch_per_kg'].quantile(0.75)) & (df['Value_for_Money_Point'] >= df['Value_for_Money_Point'].median())]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True)
-df_sorted.head(5)
+df_sorted.head(10)
 질문: 가볍고 성능이 아주 뛰어난걸로 부탁해
 코드: df['inch_per_kg'] = df['inch'] / df['무게(kg)']
 df_filtered = df[(df['inch_per_kg'] >= df['inch_per_kg'].median()) & (df['CPU_Score'] >= df['CPU_Score'].quantile(0.75)) & (df['GPU_Score'] >= df['GPU_Score'].quantile(0.75)) & (df['Value_for_Money_Point'] >= df['Value_for_Money_Point'].median())]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True)
-df_sorted.head(5)
+df_sorted.head(10)
 질문: as도 잘되고 성능도 훌륭한 제품은 어떤게 있니?
 코드: df_AS = df[df['Manufacturer'].isin(['SAMSUNG', 'LG'])]
 df_filtered = df_AS[(df_AS['CPU_Score'] >= df_AS['CPU_Score'].median()) & (df_AS['GPU_Score'] >= df_AS['GPU_Score'].median()) & (df_AS['Value_for_Money_Point'] >= df_AS['Value_for_Money_Point'].median())]
 df_sorted = df_filtered.sort_values(by=['Value_Point', 'Price_won'], ascending=[False, True])
-df_sorted.head(5)
+df_sorted.head(10)
 질문: 엘지제품중에 성능이 훌륭한 제품은 어떤거야?
 코드: df_LG = df[df['Manufacturer'].isin(['LG'])]
 df_filtered = df_LG[(df_AS['CPU_Score'] >= df_LG['CPU_Score'].median()) & (df_LG['GPU_Score'] >= df_LG['GPU_Score'].median()) & (df_LG['Value_for_Money_Point'] >= df_LG['Value_for_Money_Point'].median())]
 df_sorted = df_filtered.sort_values(by=['Value_Point', 'Price_won'], ascending=[False, True])
-df_sorted.head(5)
+df_sorted.head(10)
 '''
 
 # Submit 버튼 상태를 초기화하는 함수를 정의합니다.
