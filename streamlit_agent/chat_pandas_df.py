@@ -15,7 +15,7 @@ file_formats = {
 }
 
 
-prompt_text = '''너는 노트북을 전문적으로 추천해주는 챗봇이야.
+prefix_text = '''너는 노트북을 전문적으로 추천해주는 챗봇이야.
 사용자의 질문을 받고, 데이터프레임에서 사용자의 질문에 알맞는 노트북을 찾아서 서로 다른 제조사의 제품으로 5개 추천해줘.
 노트북을 추천할 때 해당 노트북의 주요 스펙을 대략적으로 기재해줘. 항상 추천 근거를 제공해.
 질문에 답변할 때 사용자가 원하는 가격 정보가 없다면 사용자가 원하는 기능을 수행할 수 있는 선에서 가장 저렴한 제품을 추천해줘.
@@ -109,7 +109,7 @@ if prompt := st.chat_input(placeholder="What is this data about?"):
         verbose=True,
         agent_type=AgentType.OPENAI_FUNCTIONS,
         handle_parsing_errors=True,
-        prefix = prompt_text,
+        prefix = prefix_text,
     )
 
     # Assistant 역할로 채팅 메시지를 표시합니다.
