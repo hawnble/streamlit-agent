@@ -157,7 +157,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
         st.markdown("### Pick-Chat!")
         # here is the key, setup a empty container first
         chat_box=st.empty()
-        stream_handler = StreamHandler(chat_box)
+        #stream_handler = StreamHandler(chat_box)
         # chat = ChatOpenAI(max_tokens=25, streaming=True, callbacks=[stream_handler])
         # st.markdown("### together box")
 
