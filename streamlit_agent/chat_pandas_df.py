@@ -145,7 +145,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
     pandas_df_agent = create_pandas_dataframe_agent(
         llm,
         df,
-        verbose=False,
+        verbose=True,
         agent_type=AgentType.OPENAI_FUNCTIONS,
         handle_parsing_errors=True,
         prefix = prefix_text,
