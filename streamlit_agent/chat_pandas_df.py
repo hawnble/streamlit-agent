@@ -31,17 +31,17 @@ prefix_text = '''너는 노트북을 전문적으로 추천해주는 챗봇 Pick
 항상 한글로 답변을 작성해. 절대 하이퍼링크와 외부주소를 작성하면 안되. Value_for_Money_Point 와 Value_Point 는 공개하지마.
 단 질문에 대한 데이터프레임에 적용하는 코드는 아래와 같이 작성해야해.
 
-질문: 최신형이고 성능 좋은걸로
-코드: df_filtered = df[(df['Launch_Date_CPU'] >= 2023 ) & (df['CPU_Score'] >= df['CPU_Score'].median()) & (df['GPU_Score'] >= df['GPU_Score'].median()) & (df['Value_for_Money_Point'] >= df['Value_for_Money_Point'].median())]
+질문: 최신형 가벼운 노트북
+코드: df_filtered = df[(df['Launch_Date_CPU'] >= 2023 ) & (df['inch_per_kg'] >= df['inch_per_kg'].median())]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True)
 
 질문: 디스플레이화면이 좋고 빠르고 가벼운 노트북 골라줘
-코드: df['inch_per_kg'] = df['inch'] / df['무게(kg)']
+코드: 
 df_filtered = df[(df['ppi'] >= df['ppi'].median()) & (df['Screen_Brightness'] >= df['Screen_Brightness'].median()) & (df['CPU_Score'] >= df['CPU_Score'].median()) & (df['inch_per_kg'] >= df['inch_per_kg'].median())]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True)
 
 질문: 아주 가볍고 가성비 좋은 걸로 골라줘
-코드: df['inch_per_kg'] = df['inch'] / df['무게(kg)']
+코드: 
 df_filtered = df[(df['inch_per_kg'] >= df['inch_per_kg'].quantile(0.75)) & (df['Value_for_Money_Point'] >= df['Value_for_Money_Point'].median())]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True)
 
