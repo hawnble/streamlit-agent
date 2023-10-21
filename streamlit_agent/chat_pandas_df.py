@@ -82,15 +82,15 @@ def load_data(uploaded_file):
         st.error(f"Unsupported file format: {ext}")
         return None
 
-class StreamHandler(BaseCallbackHandler):
-    def __init__(self, container, initial_text=""):
-        self.container = container
-        self.text=initial_text
-    def on_llm_new_token(self, token: str, **kwargs) -> None:
-        # "/" is a marker to show difference
-        # you don't need it
-        self.text+=token
-        self.container.markdown(self.text)
+# class StreamHandler(BaseCallbackHandler):
+#     def __init__(self, container, initial_text=""):
+#         self.container = container
+#         self.text=initial_text
+#     def on_llm_new_token(self, token: str, **kwargs) -> None:
+#         # "/" is a marker to show difference
+#         # you don't need it
+#         self.text+=token
+#         self.container.markdown(self.text)
 
 # Streamlit 페이지 설정
 st.set_page_config(page_title="LangChain: Chat with pandas DataFrame", page_icon="🦜")
