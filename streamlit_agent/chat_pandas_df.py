@@ -82,15 +82,15 @@ def load_data(uploaded_file):
         st.error(f"Unsupported file format: {ext}")
         return None
 
-# class StreamHandler(BaseCallbackHandler):
-#     def __init__(self, container, initial_text=""):
-#         self.container = container
-#         self.text=initial_text
-#     def on_llm_new_token(self, token: str, **kwargs) -> None:
-#         # "/" is a marker to show difference
-#         # you don't need it
-#         self.text+=token
-#         self.container.markdown(self.text)
+class StreamHandler(BaseCallbackHandler):
+    def __init__(self, container, initial_text=""):
+        self.container = container
+        self.text=initial_text
+    def on_llm_new_token(self, token: str, **kwargs) -> None:
+        # "/" is a marker to show difference
+        # you don't need it
+        self.text+=token
+        self.container.markdown(self.text)
 
 # Streamlit 페이지 설정
 st.set_page_config(page_title="LangChain: Chat with pandas DataFrame", page_icon="🦜")
@@ -157,15 +157,15 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
         st.markdown("### Pick-Chat!")
         # here is the key, setup a empty container first
         chat_box=st.empty()
-        #stream_handler = StreamHandler(chat_box)
+        stream_handler = StreamHandler(chat_box)
         # chat = ChatOpenAI(max_tokens=25, streaming=True, callbacks=[stream_handler])
         # st.markdown("### together box")
 
         # Streamlit 콜백 핸들러를 생성합니다.
-        st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
+        #st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 
         # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
-        response = pandas_df_agent.run(st.session_state.messages, callbacks=[StreamlitCallbackHandler])
+        response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler])
 
         # Assistant의 응답을 대화 기록에 추가하고 출력합니다.
         st.session_state.messages.append({"role": "assistant", "content": response})
