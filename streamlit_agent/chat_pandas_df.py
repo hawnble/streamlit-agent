@@ -113,7 +113,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
     max_sim = -1
     max_idx = -1
     user_query = prompt
-    for idx, val in q_df[['Embedded_Queries']].iterrows():
+    for idx in range(len(q_df)):
         embedded_user_query = model.encode(user_query)
         cos_sim = cal_score(embedded_user_query, q_df.loc[idx, 'Embedded_Queries'])
   
