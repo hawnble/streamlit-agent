@@ -113,63 +113,64 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
     max_sim = -1
     max_idx = -1
     user_query = prompt
+    embedded_user_query = model.encode(user_query)
     for idx in range(len(q_df)):
-        embedded_user_query = model.encode(user_query)
+        print(embedded_user_query, q_df.loc[idx, 'Embedded_Queries'])
         cos_sim = cal_score(embedded_user_query, q_df.loc[idx, 'Embedded_Queries'])
   
-        if cos_sim > max_sim:
-            max_sim = cos_sim.item()
-            max_idx = idx
+#         if cos_sim > max_sim:
+#             max_sim = cos_sim.item()
+#             max_idx = idx
 
-    similar_quary = q_df.loc[max_idx, 'Queries']
-    code = q_df.loc[max_idx, 'codes']
-    prefix_text = f'''너는 노트북을 전문적으로 추천해주는 챗봇 Pick-Chat!이야.
-항상 가격과 무게와 화면크기와 장점을 말해줘. 다른 정보는 요청시에만 제공해.
-서로다른제조사로 제품을 최대 5개 추천하고 제품마다 줄바꿈을 해줘.
-질문에 부합하는 데이터를 찾을 수 없는 경우에는 사용자에게 질문을 더 자세히 작성해달라고 요청해.
-항상 한글로 답변을 작성해. 절대 하이퍼링크와 외부주소를 작성하면 안되. Value_for_Money_Point 와 Value_Point 는 공개하지마.
-단 질문에 대한 데이터프레임에 적용하는 코드는 아래와 같이 작성해야해.
-질문: {similar_quary}
-코드: {code}
-'''
+#     similar_quary = q_df.loc[max_idx, 'Queries']
+#     code = q_df.loc[max_idx, 'codes']
+#     prefix_text = f'''너는 노트북을 전문적으로 추천해주는 챗봇 Pick-Chat!이야.
+# 항상 가격과 무게와 화면크기와 장점을 말해줘. 다른 정보는 요청시에만 제공해.
+# 서로다른제조사로 제품을 최대 5개 추천하고 제품마다 줄바꿈을 해줘.
+# 질문에 부합하는 데이터를 찾을 수 없는 경우에는 사용자에게 질문을 더 자세히 작성해달라고 요청해.
+# 항상 한글로 답변을 작성해. 절대 하이퍼링크와 외부주소를 작성하면 안되. Value_for_Money_Point 와 Value_Point 는 공개하지마.
+# 단 질문에 대한 데이터프레임에 적용하는 코드는 아래와 같이 작성해야해.
+# 질문: {similar_quary}
+# 코드: {code}
+# '''
 
-    # OpenAI 모델 설정 및 실행
-    if not openai_api_key:
-        st.info("Please add your OpenAI API key to continue.")
-        st.stop()
+#     # OpenAI 모델 설정 및 실행
+#     if not openai_api_key:
+#         st.info("Please add your OpenAI API key to continue.")
+#         st.stop()
 
-    # ChatOpenAI 모델 초기화 및 설정
-    llm = ChatOpenAI(
-        temperature=0.3, model="gpt-4-0613", openai_api_key=openai_api_key, streaming=True
-    )
+#     # ChatOpenAI 모델 초기화 및 설정
+#     llm = ChatOpenAI(
+#         temperature=0.3, model="gpt-4-0613", openai_api_key=openai_api_key, streaming=True
+#     )
 
-    # LangChain을 사용하여 pandas DataFrame 에이전트 생성 및 실행
-    pandas_df_agent = create_pandas_dataframe_agent(
-        llm,
-        df,
-        verbose=True,
-        agent_type=AgentType.OPENAI_FUNCTIONS,
-        handle_parsing_errors=True,
-        prefix = prefix_text,
-    )
+#     # LangChain을 사용하여 pandas DataFrame 에이전트 생성 및 실행
+#     pandas_df_agent = create_pandas_dataframe_agent(
+#         llm,
+#         df,
+#         verbose=True,
+#         agent_type=AgentType.OPENAI_FUNCTIONS,
+#         handle_parsing_errors=True,
+#         prefix = prefix_text,
+#     )
 
-    # Assistant 역할로 채팅 메시지를 표시합니다.
-    with st.chat_message("assistant"):
+#     # Assistant 역할로 채팅 메시지를 표시합니다.
+#     with st.chat_message("assistant"):
 
-        st.markdown("### Pick-Chat!")
-        # here is the key, setup a empty container first
-        chat_box=st.empty()
-        stream_handler = StreamHandler(chat_box)
-        # chat = ChatOpenAI(max_tokens=25, streaming=True, callbacks=[stream_handler])
-        # st.markdown("### together box")
+#         st.markdown("### Pick-Chat!")
+#         # here is the key, setup a empty container first
+#         chat_box=st.empty()
+#         stream_handler = StreamHandler(chat_box)
+#         # chat = ChatOpenAI(max_tokens=25, streaming=True, callbacks=[stream_handler])
+#         # st.markdown("### together box")
 
-        # Streamlit 콜백 핸들러를 생성합니다.
-        #st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
+#         # Streamlit 콜백 핸들러를 생성합니다.
+#         #st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 
-        # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
-        response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler])
+#         # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
+#         response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler])
 
-        # Assistant의 응답을 대화 기록에 추가하고 출력합니다.
-        st.session_state.messages.append({"role": "assistant", "content": response})
-        st.write(prefix_text)
-        # st.markdown(response)
+#         # Assistant의 응답을 대화 기록에 추가하고 출력합니다.
+#         st.session_state.messages.append({"role": "assistant", "content": response})
+#         st.write(prefix_text)
+#         # st.markdown(response)
