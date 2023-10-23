@@ -16,14 +16,10 @@ df.pop('Unnamed: 0')
 #df
 
 from sentence_transformers import SentenceTransformer
-q_df = pd.read_excel("/content/eqc.xlsx")
+q_df = pd.read_excel("eqc.xlsx")
 
 model = SentenceTransformer('jhgan/ko-sroberta-multitask')
 q_df['Embedded_Queries'] = None
-
-for i in range(len(q_df)):
-    embedded_query = model.encode(q_df.loc[i, 'Queries'])
-    q_df.at[i, 'Embedded_Queries'] = embedded_query
 
 file_formats = {
     "csv": pd.read_csv,
@@ -34,15 +30,7 @@ file_formats = {
 }
 
 
-prefix_text = f'''너는 노트북을 전문적으로 추천해주는 챗봇 Pick-Chat!이야.
-항상 가격과 무게와 화면크기와 장점을 말해줘. 다른 정보는 요청시에만 제공해.
-서로다른제조사로 제품을 최대 5개 추천하고 제품마다 줄바꿈을 해줘.
-질문에 부합하는 데이터를 찾을 수 없는 경우에는 사용자에게 질문을 더 자세히 작성해달라고 요청해.
-항상 한글로 답변을 작성해. 절대 하이퍼링크와 외부주소를 작성하면 안되. Value_for_Money_Point 와 Value_Point 는 공개하지마.
-단 질문에 대한 데이터프레임에 적용하는 코드는 아래와 같이 작성해야해.
-질문: {similar_quary}
-코드: {code}
-'''
+
 
 # Submit 버튼 상태를 초기화하는 함수를 정의합니다.
 def clear_submit():
@@ -135,6 +123,15 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
 
     similar_quary = q_df.loc[max_idx, 'Queries']
     code = q_df.loc[max_idx, 'codes']
+    prefix_text = f'''너는 노트북을 전문적으로 추천해주는 챗봇 Pick-Chat!이야.
+항상 가격과 무게와 화면크기와 장점을 말해줘. 다른 정보는 요청시에만 제공해.
+서로다른제조사로 제품을 최대 5개 추천하고 제품마다 줄바꿈을 해줘.
+질문에 부합하는 데이터를 찾을 수 없는 경우에는 사용자에게 질문을 더 자세히 작성해달라고 요청해.
+항상 한글로 답변을 작성해. 절대 하이퍼링크와 외부주소를 작성하면 안되. Value_for_Money_Point 와 Value_Point 는 공개하지마.
+단 질문에 대한 데이터프레임에 적용하는 코드는 아래와 같이 작성해야해.
+질문: {similar_quary}
+코드: {code}
+'''
 
     # OpenAI 모델 설정 및 실행
     if not openai_api_key:
