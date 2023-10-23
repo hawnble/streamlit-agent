@@ -1,6 +1,6 @@
 matplotlib
 pandas
-langchain[all]
+langchain
 openai
 langchain_experimental
 transformers
