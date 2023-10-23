@@ -93,8 +93,8 @@ class StreamHandler(BaseCallbackHandler):
         self.container.markdown(self.text)
 
 # Streamlit 페이지 설정
-st.set_page_config(page_title="LangChain: Chat with pandas DataFrame", page_icon="🦜")
-st.title("🦜 LangChain: Chat with pandas DataFrame")
+st.set_page_config(page_title="Pick-Chat! : Chat with DataFrame!", page_icon="🦜")
+st.title("🦜 Pick-Chat! : Chat with DataFrame!")
 
 # # 파일 업로드 위젯을 생성합니다.
 # uploaded_file = st.file_uploader(
