@@ -133,9 +133,8 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
             max_sim = cos_sim.item()
             max_idx = idx
 
-
-similar_quary = q_df.loc[max_idx, 'Queries']
-code = q_df.loc[max_idx, 'codes']
+    similar_quary = q_df.loc[max_idx, 'Queries']
+    code = q_df.loc[max_idx, 'codes']
 
     # OpenAI 모델 설정 및 실행
     if not openai_api_key:
