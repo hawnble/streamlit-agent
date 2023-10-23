@@ -6,3 +6,4 @@ langchain_experimental
 transformers
 tabulate
 sentence-transformers
+openpyxl
