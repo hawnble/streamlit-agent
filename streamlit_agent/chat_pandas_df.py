@@ -118,7 +118,7 @@ st.title("🦜 Pick-Chat! : Chat with DataFrame!")
 #openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 openai_api_key = st.secrets["openai_key"]
 # 대화 기록을 초기화하거나 버튼을 눌러 대화 기록을 삭제합니다.
-if "messages" not in st.session_state #or st.sidebar.button("Clear conversation history"):
+if "messages" not in st.session_state :#or st.sidebar.button("Clear conversation history")
     # 초기 대화 메시지 설정
     st.session_state["messages"] = [{"role": "assistant", "content": "질문을 상세히 작성해 주시면 정확한 답변이 가능해요!"}]
 
