@@ -15,6 +15,16 @@ df = pd.read_csv("laptop_sdf_231021.csv")
 df.pop('Unnamed: 0')
 #df
 
+from sentence_transformers import SentenceTransformer
+q_df = pd.read_excel("/content/eqc.xlsx")
+
+model = SentenceTransformer('jhgan/ko-sroberta-multitask')
+q_df['Embedded_Queries'] = None
+
+for i in range(len(q_df)):
+    embedded_query = model.encode(q_df.loc[i, 'Queries'])
+    q_df.at[i, 'Embedded_Queries'] = embedded_query
+
 file_formats = {
     "csv": pd.read_csv,
     "xls": pd.read_excel,
@@ -24,41 +34,14 @@ file_formats = {
 }
 
 
-prefix_text = '''너는 노트북을 전문적으로 추천해주는 챗봇 Pick-Chat!이야.
-항상 가격과 무게와 화면크기만 제공해. 추천이유를 설명해줘. 다른 정보는 요청시에만 제공해.
+prefix_text = f'''너는 노트북을 전문적으로 추천해주는 챗봇 Pick-Chat!이야.
+항상 가격과 무게와 화면크기와 장점을 말해줘. 다른 정보는 요청시에만 제공해.
 서로다른제조사로 제품을 최대 5개 추천하고 제품마다 줄바꿈을 해줘.
 질문에 부합하는 데이터를 찾을 수 없는 경우에는 사용자에게 질문을 더 자세히 작성해달라고 요청해.
 항상 한글로 답변을 작성해. 절대 하이퍼링크와 외부주소를 작성하면 안되. Value_for_Money_Point 와 Value_Point 는 공개하지마.
 단 질문에 대한 데이터프레임에 적용하는 코드는 아래와 같이 작성해야해.
-
-질문: 최신형 가벼운 노트북
-코드: df_filtered = df[(df['Launch_Date_CPU'] >= 2023 ) & (df['inch_per_kg'] >= df['inch_per_kg'].median())]
-df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True)
-
-질문: 디스플레이화면이 좋고 빠르고 가벼운 노트북 골라줘
-코드: 
-df_filtered = df[(df['ppi'] >= df['ppi'].median()) & (df['Screen_Brightness'] >= df['Screen_Brightness'].median()) & (df['CPU_Score'] >= df['CPU_Score'].median()) & (df['inch_per_kg'] >= df['inch_per_kg'].median())]
-df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True)
-
-질문: 아주 가볍고 가성비 좋은 걸로 골라줘
-코드: 
-df_filtered = df[(df['inch_per_kg'] >= df['inch_per_kg'].quantile(0.75)) & (df['Value_for_Money_Point'] >= df['Value_for_Money_Point'].median())]
-df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True)
-
-질문: 화면이 크고 성능이 아주 뛰어난걸로 부탁해
-코드: df_filtered = df[(df['inch'] >= 15 ) & (df['CPU_Score'] >= df['CPU_Score'].quantile(0.75)) & (df['GPU_Score'] >= df['GPU_Score'].quantile(0.75)) & (df['Value_for_Money_Point'] >= df['Value_for_Money_Point'].median())]
-df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True)
-
-질문: as도 잘되고 성능도 훌륭한 제품은 어떤게 있니?
-코드: df_AS = df[df['Manufacturer'].isin(['SAMSUNG', 'LG'])]
-df_filtered = df_AS[(df_AS['CPU_Score'] >= df_AS['CPU_Score'].median()) & (df_AS['GPU_Score'] >= df_AS['GPU_Score'].median()) & (df_AS['Value_for_Money_Point'] >= df_AS['Value_for_Money_Point'].median())]
-df_sorted = df_filtered.sort_values(by=['Value_Point', 'Price_won'], ascending=[False, True])
-
-질문: 엘지제품중에 성능이 훌륭한 제품은 어떤거야?
-코드: df_LG = df[df['Manufacturer'].isin(['LG'])]
-df_filtered = df_LG[(df_AS['CPU_Score'] >= df_LG['CPU_Score'].median()) & (df_LG['GPU_Score'] >= df_LG['GPU_Score'].median()) & (df_LG['Value_for_Money_Point'] >= df_LG['Value_for_Money_Point'].median())]
-df_sorted = df_filtered.sort_values(by=['Value_Point', 'Price_won'], ascending=[False, True])
-
+질문: {similar_quary}
+코드: {code}
 '''
 
 # Submit 버튼 상태를 초기화하는 함수를 정의합니다.
@@ -81,6 +64,15 @@ def clear_submit():
 #         # 지원하지 않는 파일 형식일 경우 에러 메시지 출력
 #         st.error(f"Unsupported file format: {ext}")
 #         return None
+def cal_score(a, b):
+    a = torch.tensor(a)  # NumPy 배열을 PyTorch 텐서로 변환
+    b = torch.tensor(b)  # NumPy 배열을 PyTorch 텐서로 변환
+    if len(a.shape) == 1: a = a.unsqueeze(0)
+    if len(b.shape) == 1: b = b.unsqueeze(0)
+    a_norm = a / a.norm(dim=1)[:, None]
+    b_norm = b / b.norm(dim=1)[:, None]
+    return torch.mm(a_norm, b_norm.transpose(0, 1)) * 100
+
 
 class StreamHandler(BaseCallbackHandler):
     def __init__(self, container, initial_text=""):
@@ -130,6 +122,20 @@ for msg in st.session_state.messages:
 if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄래? 무게는 1.5kg 이하면 괜찮을거 같아!"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
+    max_sim = -1
+    max_idx = -1
+
+    for idx, val in q_df[['Embedded_Queries']].iterrows():
+        embedded_user_query = model.encode(user_query)
+        cos_sim = cal_score(embedded_user_query, q_df.loc[idx, 'Embedded_Queries'])
+  
+        if cos_sim > max_sim:
+            max_sim = cos_sim.item()
+            max_idx = idx
+
+
+similar_quary = q_df.loc[max_idx, 'Queries']
+code = q_df.loc[max_idx, 'codes']
 
     # OpenAI 모델 설정 및 실행
     if not openai_api_key:
@@ -169,5 +175,5 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
 
         # Assistant의 응답을 대화 기록에 추가하고 출력합니다.
         st.session_state.messages.append({"role": "assistant", "content": response})
-        # st.write(response)
+        st.write(prefix_text)
         # st.markdown(response)
