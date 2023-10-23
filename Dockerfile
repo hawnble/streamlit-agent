@@ -5,12 +5,11 @@ RUN apt-get update && apt-get install -y git
 
 RUN pip install poetry==1.4.2
 
+RUN python -m pip install langchain
+
+RUN pip install openai
+
 RUN pip install langchain_experimental
-
-RUN pip install langchain_experimental.agents
-
-RUN pip install langchain_experimental.agents.agent_toolkits.pandas.base
-
 
 ENV POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_IN_PROJECT=1 \
