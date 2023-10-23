@@ -66,21 +66,21 @@ def clear_submit():
     st.session_state["submit"] = False
 
 # 데이터를 로드하는 함수를 정의합니다. (캐싱 설정: 2시간)
-@st.cache_data(ttl="2h")
-def load_data(uploaded_file):
-    try:
-        # 파일 확장자 추출
-        ext = os.path.splitext(uploaded_file.name)[1][1:].lower()
-    except:
-        ext = uploaded_file.split(".")[-1]
+# @st.cache_data(ttl="2h")
+# def load_data(uploaded_file):
+#     try:
+#         # 파일 확장자 추출
+#         ext = os.path.splitext(uploaded_file.name)[1][1:].lower()
+#     except:
+#         ext = uploaded_file.split(".")[-1]
 
-    # 파일 형식에 따라 적절한 함수로 데이터를 로드합니다.
-    if ext in file_formats:
-        return file_formats[ext](uploaded_file)
-    else:
-        # 지원하지 않는 파일 형식일 경우 에러 메시지 출력
-        st.error(f"Unsupported file format: {ext}")
-        return None
+#     # 파일 형식에 따라 적절한 함수로 데이터를 로드합니다.
+#     if ext in file_formats:
+#         return file_formats[ext](uploaded_file)
+#     else:
+#         # 지원하지 않는 파일 형식일 경우 에러 메시지 출력
+#         st.error(f"Unsupported file format: {ext}")
+#         return None
 
 class StreamHandler(BaseCallbackHandler):
     def __init__(self, container, initial_text=""):
@@ -118,7 +118,7 @@ st.title("🦜 Pick-Chat! : Chat with DataFrame!")
 #openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 openai_api_key = st.secrets["openai_key"]
 # 대화 기록을 초기화하거나 버튼을 눌러 대화 기록을 삭제합니다.
-if "messages" not in st.session_state or st.sidebar.button("Clear conversation history"):
+if "messages" not in st.session_state #or st.sidebar.button("Clear conversation history"):
     # 초기 대화 메시지 설정
     st.session_state["messages"] = [{"role": "assistant", "content": "질문을 상세히 작성해 주시면 정확한 답변이 가능해요!"}]
 
