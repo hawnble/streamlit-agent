@@ -16,10 +16,10 @@ df.pop('Unnamed: 0')
 #df
 
 from sentence_transformers import SentenceTransformer
-q_df = pd.read_excel("eqc.xlsx")
+q_df = pd.read_excel("EQC_df_231023.xlsx")
 
 model = SentenceTransformer('jhgan/ko-sroberta-multitask')
-q_df['Embedded_Queries'] = None
+
 
 file_formats = {
     "csv": pd.read_csv,
