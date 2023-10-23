@@ -1,0 +1,6 @@
+matplotlib
+pandas
+langchain[all]
+openai[all]
+langchain_experimental[all]
+transformers[all]
