@@ -10,7 +10,10 @@ import pandas as pd
 import os
 
 @st.cache_data
-df = pd.read_csv("laptop_sdf_231021.csv")
+def load_data(url):
+    df = pd.read_csv(url)
+    return df
+df = load_data("laptop_sdf_231021.csv")
 #df = df.astype(str)
 df.pop('Unnamed: 0')
 #df
