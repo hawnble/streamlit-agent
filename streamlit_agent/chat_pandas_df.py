@@ -9,6 +9,59 @@ import streamlit as st
 import pandas as pd
 import os
 
+
+
+
+# file_formats = {
+#     "csv": pd.read_csv,
+#     "xls": pd.read_excel,
+#     "xlsx": pd.read_excel,
+#     "xlsm": pd.read_excel,
+#     "xlsb": pd.read_excel,
+# }
+
+
+from PIL import Image
+im_logo = Image.open("로고.png")
+im_symbol = Image.open("symbol.png")
+
+# Submit 버튼 상태를 초기화하는 함수를 정의합니다.
+def clear_submit():
+    st.session_state["submit"] = False
+
+# 데이터를 로드하는 함수를 정의합니다. (캐싱 설정: 2시간)
+# @st.cache_data(ttl="2h")
+# def load_data(uploaded_file):
+#     try:
+#         # 파일 확장자 추출
+#         ext = os.path.splitext(uploaded_file.name)[1][1:].lower()
+#     except:
+#         ext = uploaded_file.split(".")[-1]
+
+#     # 파일 형식에 따라 적절한 함수로 데이터를 로드합니다.
+#     if ext in file_formats:
+#         return file_formats[ext](uploaded_file)
+#     else:
+#         # 지원하지 않는 파일 형식일 경우 에러 메시지 출력
+#         st.error(f"Unsupported file format: {ext}")
+#         return None
+
+
+class StreamHandler(BaseCallbackHandler):
+    def __init__(self, container, initial_text=""):
+        self.container = container
+        self.text=initial_text
+    def on_llm_new_token(self, token: str, **kwargs) -> None:
+        # "/" is a marker to show difference
+        # you don't need it
+        self.text+=token
+        self.container.markdown(self.text)
+
+# Streamlit 페이지 설정
+st.set_page_config(page_title="Pick-Chat! : Chat with DataFrame!", page_icon=im_symbol)#
+st.image(im_logo)
+st.title("Pick-Chat! : Chat with DataFrame!") #🦜 
+
 @st.cache_data
 def load_data(url):
     df = pd.read_csv(url)
@@ -19,13 +72,6 @@ df.pop('Unnamed: 0')
 #df
 
 
-# file_formats = {
-#     "csv": pd.read_csv,
-#     "xls": pd.read_excel,
-#     "xlsx": pd.read_excel,
-#     "xlsm": pd.read_excel,
-#     "xlsb": pd.read_excel,
-# }
 prefix_text = f'''너는 노트북을 전문적으로 추천해주는 챗봇 Pick-Chat!이야.
 항상 가격과 무게와 화면크기와 특징을 말해줘. 다른 정보는 요청시에만 제공해.
 서로다른제조사로 제품을 최대 5개 추천하고 제품마다 줄바꿈을 해줘.
@@ -79,48 +125,6 @@ df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'V
 코드: "df_filtered = df[(df['inch'] >= 15 ) & (df['inch_per_kg'] >= df['inch_per_kg'].quantile(0.75)) & (df['Value_for_Money_Point'] >= df['Value_for_Money_Point'].median())]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
 '''
-
-
-from PIL import Image
-im_logo = Image.open("로고.png")
-im_symbol = Image.open("symbol.png")
-
-# Submit 버튼 상태를 초기화하는 함수를 정의합니다.
-def clear_submit():
-    st.session_state["submit"] = False
-
-# 데이터를 로드하는 함수를 정의합니다. (캐싱 설정: 2시간)
-# @st.cache_data(ttl="2h")
-# def load_data(uploaded_file):
-#     try:
-#         # 파일 확장자 추출
-#         ext = os.path.splitext(uploaded_file.name)[1][1:].lower()
-#     except:
-#         ext = uploaded_file.split(".")[-1]
-
-#     # 파일 형식에 따라 적절한 함수로 데이터를 로드합니다.
-#     if ext in file_formats:
-#         return file_formats[ext](uploaded_file)
-#     else:
-#         # 지원하지 않는 파일 형식일 경우 에러 메시지 출력
-#         st.error(f"Unsupported file format: {ext}")
-#         return None
-
-
-class StreamHandler(BaseCallbackHandler):
-    def __init__(self, container, initial_text=""):
-        self.container = container
-        self.text=initial_text
-    def on_llm_new_token(self, token: str, **kwargs) -> None:
-        # "/" is a marker to show difference
-        # you don't need it
-        self.text+=token
-        self.container.markdown(self.text)
-
-# Streamlit 페이지 설정
-st.set_page_config(page_title="Pick-Chat! : Chat with DataFrame!", page_icon=im_symbol)#
-st.image(im_logo)
-st.title("Pick-Chat! : Chat with DataFrame!") #🦜 
 
 # # 파일 업로드 위젯을 생성합니다.
 # uploaded_file = st.file_uploader(
