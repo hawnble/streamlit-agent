@@ -139,7 +139,7 @@ st.title(im_logo, "Pick-Chat! : Chat with DataFrame!") #🦜
 #openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 openai_api_key = st.secrets["openai_key"]
 # 대화 기록을 초기화하거나 버튼을 눌러 대화 기록을 삭제합니다.
-if "messages" not in st.session_state or st.empty1.button("Clear conversation history"):
+if "messages" not in st.session_state:# or st.button("Clear conversation history")
     # 초기 대화 메시지 설정
     st.session_state["messages"] = [{"role": "assistant", "content": "질문을 상세히 작성해 주시면 정확한 답변이 가능해요!"}]
 
@@ -192,3 +192,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
         st.session_state.messages.append({"role": "assistant", "content": response})
         #st.write(response)
         # st.markdown(response)
+
+if st.button("Clear conversation history"):
+    # 초기 대화 메시지 설정
+    st.session_state["messages"] = [{"role": "assistant", "content": "질문을 상세히 작성해 주시면 정확한 답변이 가능해요!"}]
