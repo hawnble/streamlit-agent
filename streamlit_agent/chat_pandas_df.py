@@ -143,8 +143,10 @@ df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'V
 # # 파일이 업로드된 경우 데이터를 로드합니다.
 # if uploaded_file:
 #     df = load_data(uploaded_file)
-intro = '''저는 노트북을 전문적으로 추천해주는 챗봇 Pick-Chat 이에요!
-질문을 상세히 작성해 주시면 정확한 답변이 가능해요!'''
+
+intro = '저는 노트북을 전문적으로 추천해주는 챗봇 Pick-Chat 이에요!{}
+질문을 상세히 작성해 주시면 정확한 답변이 가능해요!'.format('\n')
+
 # OpenAI API 키 입력을 받습니다.
 #openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 openai_api_key = st.secrets["openai_key"]
