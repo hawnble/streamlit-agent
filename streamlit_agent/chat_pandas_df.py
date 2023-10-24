@@ -9,6 +9,7 @@ import streamlit as st
 import pandas as pd
 import os
 
+@st.cache_data
 df = pd.read_csv("laptop_sdf_231021.csv")
 #df = df.astype(str)
 df.pop('Unnamed: 0')
@@ -115,7 +116,8 @@ class StreamHandler(BaseCallbackHandler):
 
 # Streamlit 페이지 설정
 st.set_page_config(page_title="Pick-Chat! : Chat with DataFrame!", page_icon=im_symbol)#
-st.title("Pick-Chat! : Chat with DataFrame!", title_icon = im_logo) #🦜 
+st.image(im_logo)
+st.title("Pick-Chat! : Chat with DataFrame!") #🦜 
 
 # # 파일 업로드 위젯을 생성합니다.
 # uploaded_file = st.file_uploader(
