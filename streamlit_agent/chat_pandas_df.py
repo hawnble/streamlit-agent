@@ -119,7 +119,7 @@ class StreamHandler(BaseCallbackHandler):
 
 # Streamlit 페이지 설정
 st.set_page_config(page_title="Pick-Chat! : Chat with DataFrame!", page_icon=im_symbol)#
-st.image(im_logo)
+#st.image(im_logo)
 st.title("Pick-Chat! : Chat with DataFrame!") #🦜 
 
 # # 파일 업로드 위젯을 생성합니다.
