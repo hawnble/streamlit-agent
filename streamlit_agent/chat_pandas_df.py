@@ -77,6 +77,7 @@ df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'V
 '''
 
 
+from PIL import Image
 
 # Submit 버튼 상태를 초기화하는 함수를 정의합니다.
 def clear_submit():
