@@ -78,6 +78,8 @@ df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'V
 
 
 from PIL import Image
+im_logo = Image.open("로고.png")
+im_symbol = Image.open("symbol.png")
 
 # Submit 버튼 상태를 초기화하는 함수를 정의합니다.
 def clear_submit():
@@ -112,7 +114,7 @@ class StreamHandler(BaseCallbackHandler):
         self.container.markdown(self.text)
 
 # Streamlit 페이지 설정
-st.set_page_config(page_title="Pick-Chat! : Chat with DataFrame!")#, page_icon="🦜"
+st.set_page_config(page_title="Pick-Chat! : Chat with DataFrame!", page_icon=im_symbol)#
 #st.title("Pick-Chat! : Chat with DataFrame!") #🦜 
 
 # # 파일 업로드 위젯을 생성합니다.
