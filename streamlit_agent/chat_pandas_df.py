@@ -64,9 +64,9 @@ st.image(im_logo)
 
 hide_streamlit_style = """
             <style>
-            #[data-testid="stToolbar"] {visibility: hidden !important;}
-            header {visibility: hidden !important;}
-            footer {visibility: hidden !important;}
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
             #.st-emotion-cache-18ni7ap {visibility: hidden;}
             .st-emotion-cache-1pxazr7 {visibility: hidden;}
             </style>
