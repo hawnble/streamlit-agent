@@ -62,25 +62,16 @@ st.set_page_config(page_title="Pick-Chat! : Chat with DataFrame!", page_icon=im_
 st.image(im_logo)
 #st.title("Pick-Chat! : Chat with DataFrame!") #🦜 
 
-st.markdown("""
-<style>
-.st-emotion-cache-18ni7ap {
-    #left: 1100px;
-    #right: -1000px;
-    #display: none;
-    visibility: hidden;
-}
-.st-emotion-cache-1pxazr7 {
-    display: none;
-}
-""", unsafe_allow_html=True)
 hide_streamlit_style = """
             <style>
             [data-testid="stToolbar"] {visibility: hidden !important;}
             footer {visibility: hidden !important;}
+            .st-emotion-cache-18ni7ap {visibility: hidden;}
+            .st-emotion-cache-1pxazr7 {display: none;}
             </style>
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
 @st.cache_data
 def load_data(url):
     df = pd.read_csv(url)
