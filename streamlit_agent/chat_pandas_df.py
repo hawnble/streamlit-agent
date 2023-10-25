@@ -74,6 +74,7 @@ st.markdown("""
     display: none;
 }
 .viewerBadge_container__r5tak {
+    display: none;
     visibility: hidden;
 }
 </style>
