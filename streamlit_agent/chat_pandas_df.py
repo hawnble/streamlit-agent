@@ -69,6 +69,9 @@ st.markdown("""
     #right: -1000px;
     display: none;
 }
+.st-emotion-cache-1pxazr7 {
+    display: none;
+}
 </style>
 """, unsafe_allow_html=True)
 
