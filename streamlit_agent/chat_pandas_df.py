@@ -73,9 +73,9 @@ st.markdown("""
 .st-emotion-cache-1pxazr7 {
     display: none;
 }
-a {
-    display: none;
- }
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+
 """, unsafe_allow_html=True)
 
 @st.cache_data
