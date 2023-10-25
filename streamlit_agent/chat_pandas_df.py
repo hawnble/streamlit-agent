@@ -92,51 +92,60 @@ prefix_text = f'''너는 노트북을 전문적으로 추천해주는 챗봇 Pic
 항상 한글로 답변을 작성해. 절대 하이퍼링크와 외부주소를 작성하면 안되. Display_Point, Value_for_Money_Point, Value_Point 는 공개하지마.
 단 질문에 대한 데이터프레임에 적용하는 코드는 아래와 같이 작성해야해.
 
-질문: 최신형 가벼운 노트북
-코드: "df_filtered = df[(df['Launch_Date_CPU'] >= 2023 ) & (df['inch_per_kg'] >= df['inch_per_kg'].median()) & (df['Value_for_Money_Point'] >= df['Value_for_Money_Point'].median())]
-df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
-
-질문: 디스플레이화면이 좋고 빠르고 가벼운 노트북 골라줘
-코드: "df_filtered = df[(df['ppi'] >= df['ppi'].median()) & (df['Screen_Brightness'] >= df['Screen_Brightness'].median()) & (df['CPU_Score'] >= df['CPU_Score'].median()) & (df['inch_per_kg'] >= df['inch_per_kg'].median())]
+최신형 가벼운 노트북	"df_filtered = df[(df['CPU_Launch_Date'] >= 2023) & (df['inch_per_kg'] >= 13)]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
-
-질문: 화면이 크고 성능이 아주 뛰어난걸로 부탁해
-코드: "df_filtered = df[(df['inch'] >= 15 ) & (df['CPU_Score'] >= df['CPU_Score'].quantile(0.75)) & (df['GPU_Score'] >= df['GPU_Score'].quantile(0.75)) & (df['Value_for_Money_Point'] >= df['Value_for_Money_Point'].median())]
+최신형 고성능 노트북	"df_filtered = df[(df['CPU_Launch_Date'] >= 2023) & (df['CPU_Score'] >= df['CPU_Score'].quantile(0.75)) & (df['GPU_Score'] >= df['GPU_Score'].quantile(0.75))]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
-
-질문: as도 잘되고 성능도 훌륭한 제품은 어떤게 있니?
-코드: "df_AS = df[df['Manufacturer'].isin(['SAMSUNG', 'LG'])]
-df_filtered = df_AS[(df_AS['CPU_Score'] >= df_AS['CPU_Score'].median()) & (df_AS['GPU_Score'] >= df_AS['GPU_Score'].median()) & (df_AS['Value_for_Money_Point'] >= df_AS['Value_for_Money_Point'].median())]
+최신형 화면 좋은 노트북	"df_filtered = df[(df['CPU_Launch_Date'] >= 2023) & (df['Display_Point'] >= df['Display_Point'].quantile(0.80))]
+df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
+최신형 as 잘되는 노트북	"df_filtered = df[(df['Manufacturer'].isin(['SAMSUNG', 'LG'])) & (df['CPU_Launch_Date'] >= 2023)]
+df_sorted = df_filtered.sort_values(by=['Value_for_Money_Point', 'Price_won'], ascending=[False, True]).head(5)"
+최신형 가성비 좋은 노트북	"df_filtered = df[(df['CPU_Launch_Date'] >= 2023)]
+df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
+최신형 빠른 노트북	"df_filtered = df[(df['CPU_Launch_Date'] >= 2023) & (df['CPU_Score'] >= df['CPU_Score'].quantile(0.75))]
+df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
+가볍고 성능 좋은 노트북	"df_filtered = df[(df['inch_per_kg'] >= df['inch_per_kg'].quantile(0.74)) & (df['CPU_Score'] >= df['CPU_Score'].median()) & (df['GPU_Score'] >= df['GPU_Score'].median())]
+df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
+디스플레이화면이 좋고 가벼운 노트북 골라줘	"df_filtered = df[(df['Display_Point'] >= df['Display_Point'].quantile(0.85)) & (df['inch_per_kg'] >= df['inch_per_kg'].quantile(0.74))]
+df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
+가볍고 as 잘되는 노트북	"df_filtered = df[df['Manufacturer'].isin(['SAMSUNG', 'LG']) & (df['inch_per_kg'] >= df['inch_per_kg'].quantile(0.74))]
+df_sorted = df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(3, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
+가볍고 가성비 좋은 노트북	"df_filtered = df[(df['inch_per_kg'] >= 11)]
+df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
+가볍고 빠른 노트북	"df_filtered = df[(df['inch_per_kg'] >= 9.2) & (df['CPU_Score'] >= df['CPU_Score'].quantile(0.50))]
+df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
+화면 좋고 성능 훌륭한 제품	"df_filtered = df[(df['Display_Point'] >= df['Display_Point'].quantile(0.90)) & (df['CPU_Score'] >= df['CPU_Score'].quantile(0.90)) & (df['GPU_Score'] >= df['GPU_Score'].quantile(0.90))]
+df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
+as도 잘되고 성능도 훌륭한 제품은 어떤게 있니?	"df_filtered = df[df['Manufacturer'].isin(['SAMSUNG', 'LG']) & (df['CPU_Score'] >= 20000)]
 df_sorted = df_filtered.sort_values(by=['Value_Point', 'Price_won'], ascending=[False, True]).head(5)"
-
-질문: 엘지제품중에 가성비 제품은 어떤거야?
-코드: "df_LG = df[df['Manufacturer'].isin(['LG'])]
-df_filtered = df_LG[(df_LG['CPU_Score'] >= df_LG['CPU_Score'].median()) & (df_LG['GPU_Score'] >= df_LG['GPU_Score'].median()) & (df_LG['Value_for_Money_Point'] >= df_LG['Value_for_Money_Point'].median())]
+성능 좋고 가성비 좋은 노트북	"df_filtered = df[(df['CPU_Score'] >= df['CPU_Score'].quantile(0.75)) & (df['GPU_Score'] >= df['GPU_Score'].median())]
+df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
+화면 좋고 as 잘되는 노트북	"df_filtered = df[(df['Manufacturer'].isin(['SAMSUNG', 'LG'])) & (df['Display_Point'] >= df['Display_Point'].quantile(0.75))]
 df_sorted = df_filtered.sort_values(by=['Value_for_Money_Point', 'Price_won'], ascending=[False, True]).head(5)"
-
-질문: 화면 작고 가벼운 노트북 골라줘
-코드: "df_filtered = df[(df['inch'] <= 14 ) & (df['inch_per_kg'] >= df['inch_per_kg'].median())]
+화면 좋고 가성비 높은 노트북	"df_filtered = df[(df['Display_Point'] >= df['Display_Point'].quantile(0.85))]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
-
-질문: 높은 성능의 게이밍 노트북 알려줘
-코드: "df_filtered = df[(df['CPU_Score'] >= df['CPU_Score'].quantile(0.75)) & (df['GPU_Score'] >= df['GPU_Score'].quantile(0.75))]
+화면 좋고 빠른 노트북	"df_filtered = df[(df['Display_Point'] >= df['Display_Point'].quantile(0.90)) & (df['CPU_Score'] >= df['CPU_Score'].quantile(0.75))]
+df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
+as 잘되고 가성비 높은 노트북	"df_filtered = df[(df['Manufacturer'].isin(['SAMSUNG', 'LG'])) & (df['Value_for_Money_Point'] >= df['Value_for_Money_Point'].quantile(0.75))]
 df_sorted = df_filtered.sort_values(by=['Value_for_Money_Point', 'Price_won'], ascending=[False, True]).head(5)"
-
-질문: 대화면을 가진 비즈니스용 노트북 알려줘.
-코드: "df_filtered = df[(df['inch'] >= 15 ) & (df['inch_per_kg'] >= df['inch_per_kg'].median()) & (df['Value_for_Money_Point'] >= df['Value_for_Money_Point'].median())]
+as 잘되고 빠른 노트북	"df_filtered = df[df['Manufacturer'].isin(['SAMSUNG', 'LG']) & (df['CPU_Score'] >= 20000)]
+df_sorted = df_filtered.sort_values(by=['Value_Point', 'Price_won'], ascending=[False, True]).head(5)"
+엘지제품중에 가성비 제품은 어떤거야?	"df_filtered = df[df['Manufacturer'].isin(['LG']) & (df['Value_for_Money_Point'] >= df['Value_for_Money_Point'].median())]
+df_sorted = df_filtered.sort_values(by=['Value_for_Money_Point', 'Price_won'], ascending=[False, True]).head(5)"
+화면 작고 가벼운 노트북 골라줘	"df_filtered = df[(df['inch'] <= 14 ) & (df['inch_per_kg'] >= 13)]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
-
-질문: 가벼운 노트북 어떤게 있을까?
-코드: "df_filtered = df[(df['inch_per_kg'] >= df['inch_per_kg'].quantile(0.75))]
+높은 성능의 게이밍 노트북 알려줘	"df_filtered = df[(df['CPU_Score'] >= df['CPU_Score'].quantile(0.90)) & (df['GPU_Score'] >= df['GPU_Score'].quantile(0.95))&(df['Display_Point'] >= df['Display_Point'].quantile(0.80))]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
-
-질문: 그래픽 디자이너용 디자인에 적합한 노트북 알려줘
-코드: "df_filtered = df[(df['ppi'] >= df['ppi'].median()) & (df['Screen_Brightness'] >= df['Screen_Brightness'].median()) & (df['CPU_Score'] >= df['CPU_Score'].median()) & (df['GPU_Score'] >= df['GPU_Score'].median()) & (df['Value_Point'] >= df['Value_Point'].median())]
+대화면을 가진 비즈니스용 노트북 알려줘.	"df_filtered = df[(df['inch'] >= 15 ) & (df['inch_per_kg'] >= 11) & (df['Value_for_Money_Point'] >= df['Value_for_Money_Point'].median())]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
-
-질문: 학생용 노트북
-코드: "df_filtered = df[(df['inch'] >= 15 ) & (df['inch_per_kg'] >= df['inch_per_kg'].quantile(0.75)) & (df['Value_for_Money_Point'] >= df['Value_for_Money_Point'].median())]
+가벼운 노트북 어떤게 있을까?	"df_filtered = df[(df['inch_per_kg'] >= df['inch_per_kg'].quantile(0.95))]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
+그래픽 디자인에 적합한 노트북 알려줘	"df_filtered = df[(df['CPU_Score'] >= df['CPU_Score'].quantile(0.50)) & (df['GPU_Score'] >= df['GPU_Score'].quantile(0.50))&(df['Display_Point'] >= df['Display_Point'].quantile(0.98))]
+df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
+학생용 pd충전 되는 노트북	"df_filtered = df[df['PD충전'].isin(['USB-PD']) & (df['inch'] >= 14 ) & (df['inch_per_kg'] >= 11) & (df['Value_for_Money_Point'] >= df['Value_for_Money_Point'].median())]
+df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
+화면이 크고 성능이 아주 뛰어난걸로 부탁해	"df_filtered = df[(df['inch'] >= 15 ) & (df['CPU_Score'] >= df['CPU_Score'].quantile(0.75)) & (df['GPU_Score'] >= df['GPU_Score'].quantile(0.75)) & (df['Value_for_Money_Point'] >= df['Value_for_Money_Point'].quantile(0.30))]
+df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
 '''
 
 # # 파일 업로드 위젯을 생성합니다.
