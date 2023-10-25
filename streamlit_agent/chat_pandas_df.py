@@ -73,7 +73,7 @@ hide_streamlit_style = """
             a.viewerBadge_container__r5tak.styles_viewerBadge__CvC9N {visibility: hidden;}
             </style>
             """
-#st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 @st.cache_data
 def load_data(url):
