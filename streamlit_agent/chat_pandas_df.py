@@ -77,7 +77,7 @@ st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 def load_data(url):
     df = pd.read_csv(url)
     return df
-df = load_data("laptop_sdf_231021.csv")
+df = load_data("laptop_sdf_231026.csv")
 #df = df.astype(str)
 df.pop('Unnamed: 0')
 #df
