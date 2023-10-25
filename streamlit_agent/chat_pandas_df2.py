@@ -9,7 +9,8 @@ import streamlit as st
 import pandas as pd
 import os
 
-
+from sentence_transformers import SentenceTransformer
+model = SentenceTransformer('jhgan/ko-sroberta-multitask')
 
 
 # file_formats = {
