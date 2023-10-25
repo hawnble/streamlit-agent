@@ -67,7 +67,7 @@ hide_streamlit_style = """
             #[data-testid="stToolbar"] {visibility: hidden !important;}
             footer {visibility: hidden !important;}
             #.st-emotion-cache-18ni7ap {visibility: hidden;}
-            #.st-emotion-cache-1pxazr7 {visibility: hidden;}
+            .st-emotion-cache-1pxazr7 {visibility: hidden;}
             </style>
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
