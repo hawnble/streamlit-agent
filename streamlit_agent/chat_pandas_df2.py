@@ -149,7 +149,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
         if cos_sim > max_sim:
             max_sim = cos_sim.item()
             max_idx = idx
-    #print(f"가장 유사한 예상질문은 '{q_df.loc[max_idx, 'Queries']}' 이며 그 유사도는 {max_sim}입니다.")
+    print(f"가장 유사한 예상질문은 '{q_df.loc[max_idx, 'Queries']}' 이며 그 유사도는 {max_sim}입니다.")
     
     similar_quary = q_df.loc[max_idx, 'Queries']
     code = q_df.loc[max_idx, 'codes']
