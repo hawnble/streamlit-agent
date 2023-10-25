@@ -176,7 +176,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
 
     # ChatOpenAI 모델 초기화 및 설정
     llm = ChatOpenAI(
-        temperature=0.25, model="gpt-4", openai_api_key=openai_api_key, streaming=True
+        temperature=0.25, model="gpt-4-32k", openai_api_key=openai_api_key, streaming=True
     )
 
     # LangChain을 사용하여 pandas DataFrame 에이전트 생성 및 실행
