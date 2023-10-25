@@ -67,7 +67,7 @@ st.markdown("""
 .st-emotion-cache-18ni7ap {
     #left: 1100px;
     #right: -1000px;
-    display: none;
+    display: hidden;
 }
 .st-emotion-cache-1pxazr7 {
     display: none;
