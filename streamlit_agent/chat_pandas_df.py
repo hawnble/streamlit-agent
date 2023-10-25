@@ -157,7 +157,7 @@ df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'V
 # if uploaded_file:
 #     df = load_data(uploaded_file)
 
-intro = ' 안녕하세요! 질문을 상세히 작성해 주시면 정확한 답변이 가능해요!'
+intro = f'{len(df)}개의 엄선된 노트북이 있어요! 질문을 상세히 작성해 주시면 정확한 답변이 가능해요!'
 
 # OpenAI API 키 입력을 받습니다.
 #openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
