@@ -66,7 +66,7 @@ hide_streamlit_style = """
             <style>
             #MainMenu {visibility: hidden;}
             footer {visibility: hidden;}
-            header {visibility: hidden;}
+            #header {visibility: hidden;}
             #.st-emotion-cache-18ni7ap {visibility: hidden;}
             .st-emotion-cache-1pxazr7 {visibility: hidden;}
             .st-emotion-cache-eczf16 {visibility: hidden;}
