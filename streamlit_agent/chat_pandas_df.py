@@ -73,6 +73,9 @@ st.markdown("""
 .st-emotion-cache-1pxazr7 {
     display: none;
 }
+.viewerBadge_container__r5tak {
+    visibility: hidden;
+}
 .viewerBadge_link__qRIco {
     display: none;
     --tw-bg-opacity: 0;
