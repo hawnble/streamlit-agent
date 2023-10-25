@@ -74,12 +74,12 @@ st.markdown("""
     display: none;
 }
 .viewerBadge_link__qRIco {
-    --tw-bg-opacity: 1;
+    display: none;
+    --tw-bg-opacity: 0;
     background-color: rgb(255 75 75/var(--tw-bg-opacity));
     border-top-left-radius: 0.5rem;
-    padding: 1rem 1.25rem;
+    padding: 0rem 0rem;
     z-index: 10;
-    display: none;
 }
 </style>
 """, unsafe_allow_html=True)
