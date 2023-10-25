@@ -77,9 +77,9 @@ hide_streamlit_style = """
 
 @st.cache_data
 def load_data(url):
-    df = pd.read_csv(url)
+    df = pd.read_excel(url)
     return df
-df = load_data("laptop_sdf_231026.csv")
+df = load_data("laptop_sdf_231026.xlsx")
 #df = df.astype(str)
 df.pop('Unnamed: 0')
 #df
@@ -192,7 +192,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
 
     # ChatOpenAI 모델 초기화 및 설정
     llm = ChatOpenAI(
-        temperature=0.3, model="gpt-3.5-turbo-16k-0613", openai_api_key=openai_api_key, streaming=True
+        temperature=0.3, model="gpt-4-32k-0613", openai_api_key=openai_api_key, streaming=True
     )
 
     # LangChain을 사용하여 pandas DataFrame 에이전트 생성 및 실행
