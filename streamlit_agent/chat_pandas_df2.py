@@ -98,8 +98,13 @@ df.pop('Unnamed: 0')
 q_df.pop('Unnamed: 0')
 #df
 
-
-
+@st.cache_data(ttl="2h")
+def embed(df):
+    for i in range(len(q_df)):
+        embedded_query = model.encode(q_df.loc[i, 'Queries'])
+        q_df.at[i, 'Embedded_Queries'] = embedded_query
+    return df
+q_df = embed(q_df)
 # # 파일 업로드 위젯을 생성합니다.
 # uploaded_file = st.file_uploader(
 #     "Upload a Data file",
