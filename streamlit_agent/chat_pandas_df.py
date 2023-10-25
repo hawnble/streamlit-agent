@@ -66,14 +66,14 @@ hide_streamlit_style = """
             <style>
             #MainMenu {visibility: hidden;}
             footer {visibility: hidden;}
-            #header {visibility: hidden;}
+            header {visibility: hidden;}
             #.st-emotion-cache-18ni7ap {visibility: hidden;}
             .st-emotion-cache-1pxazr7 {visibility: hidden;}
             .st-emotion-cache-eczf16 {visibility: hidden;}
             a.viewerBadge_container__r5tak.styles_viewerBadge__CvC9N {visibility: hidden;}
             </style>
             """
-st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+#st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 @st.cache_data
 def load_data(url):
