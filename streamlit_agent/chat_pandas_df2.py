@@ -9,7 +9,9 @@ import streamlit as st
 import pandas as pd
 import os
 
+import torch
 from sentence_transformers import SentenceTransformer
+from transformers import AutoModel, AutoTokenizer
 model = SentenceTransformer('jhgan/ko-sroberta-multitask')
 
 
