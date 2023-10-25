@@ -73,7 +73,7 @@ st.markdown("""
 .st-emotion-cache-1pxazr7 {
     display: none;
 }
-.viewerBadge_container__r5tak {
+.viewerBadge_container__r5tak styles_viewerBadge__CvC9N {
     visibility: hidden;
     bottom: 0;
     display: flex;
