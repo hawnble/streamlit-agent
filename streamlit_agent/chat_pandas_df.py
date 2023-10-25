@@ -65,11 +65,16 @@ st.image(im_logo)
 st.markdown("""
 <style>
 .st-emotion-cache-18ni7ap {
-
+    #left: 1100px;
+    #right: -1000px;
+    #display: none;
     visibility: hidden;
 }
 .st-emotion-cache-1pxazr7 {
     display: none;
+}
+.viewerBadge_container__r5tak {
+    visibility: hidden;
 }
 </style>
 """, unsafe_allow_html=True)
