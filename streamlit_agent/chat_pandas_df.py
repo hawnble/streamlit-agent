@@ -69,6 +69,7 @@ hide_streamlit_style = """
             header {visibility: hidden;}
             #.st-emotion-cache-18ni7ap {visibility: hidden;}
             .st-emotion-cache-1pxazr7 {visibility: hidden;}
+            .st-emotion-cache-eczf16 {visibility: hidden;}
             </style>
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
