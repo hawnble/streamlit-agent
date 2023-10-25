@@ -65,15 +65,9 @@ st.image(im_logo)
 st.markdown("""
 <style>
 .st-emotion-cache-18ni7ap {
-    position: fixed;
-    top: 0px;
-    #left: 0px;
-    #right: 0px;
-    height: 2.875rem;
-    background: rgb(255, 255, 255);
-    outline: none;
-    z-index: 999990;
-    display: block;
+    #left: 1100px;
+    #right: -1000px;
+    display: none;
 }
 </style>
 """, unsafe_allow_html=True)
