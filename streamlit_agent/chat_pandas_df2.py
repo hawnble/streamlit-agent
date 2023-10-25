@@ -157,16 +157,16 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
         if cos_sim > max_sim:
             max_sim = cos_sim.item()
             max_idx = idx
-    print(f"가장 유사한 예상질문은 '{q_df.loc[max_idx, 'Queries']}' 이며 그 유사도는 {max_sim}입니다.")
+    #print(f"가장 유사한 예상질문은 '{q_df.loc[max_idx, 'Queries']}' 이며 그 유사도는 {max_sim}입니다.")
     
     similar_quary = q_df.loc[max_idx, 'Queries']
     code = q_df.loc[max_idx, 'codes']
     
     prefix_text = f'''너는 노트북을 전문적으로 추천해주는 챗봇 Pick-Chat!이야.
-                항상 가격과 무게와 화면크기와 특징을 말해줘. 다른 정보는 요청시에만 제공해.
+                가격과 무게와 화면크기와 특징을 말해줘. 다른 정보는 요청시에만 제공해.
                 서로다른제조사로 제품을 최대 5개 추천하고 제품마다 줄바꿈을 해줘.
                 질문에 부합하는 데이터를 찾을 수 없는 경우에는 사용자에게 질문을 더 자세히 작성해달라고 요청해.
-                항상 한글로 답변을 작성해. 절대 하이퍼링크와 외부주소를 작성하면 안되. Display_Point, Value_for_Money_Point, Value_Point 는 공개하지마.
+                한글로 답변을 작성해. 하이퍼링크와 외부주소를 작성하면 안되. Display_Point, Value_for_Money_Point, Value_Point 는 공개하지마.
                 단 질문에 대한 데이터프레임에 적용하는 코드는 아래와 같이 작성해야해.
                 질문: {similar_quary}
                 코드: {code}
