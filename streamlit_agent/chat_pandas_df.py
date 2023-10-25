@@ -73,8 +73,15 @@ st.markdown("""
 .st-emotion-cache-1pxazr7 {
     display: none;
 }
-.__web-inspector-hide-shortcut__, .__web-inspector-hide-shortcut__ *, .__web-inspector-hidebefore-shortcut__::before, .__web-inspector-hideafter-shortcut__::after {
-    visibility: hidden !important;
+.viewerBadge_container__r5tak {
+    visibility: hidden;
+    bottom: 0;
+    display: flex;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    position: fixed;
+    right: 0;
+    z-index: 50;
 }
 
 </style>
