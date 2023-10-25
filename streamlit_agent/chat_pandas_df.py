@@ -73,18 +73,9 @@ st.markdown("""
 .st-emotion-cache-1pxazr7 {
     display: none;
 }
-.viewerBadge_container__r5tak styles_viewerBadge__CvC9N {
-    visibility: hidden;
-    bottom: 0;
-    display: flex;
-    font-size: .875rem;
-    line-height: 1.25rem;
-    position: fixed;
-    right: 0;
-    z-index: 50;
-}
-
-</style>
+ a {
+    display: none;
+ }
 """, unsafe_allow_html=True)
 
 @st.cache_data
