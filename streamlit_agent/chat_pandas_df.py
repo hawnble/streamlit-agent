@@ -73,7 +73,7 @@ st.markdown("""
 .st-emotion-cache-1pxazr7 {
     display: none;
 }
-#MainMenu {visibility: hidden;}
+MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
 
 """, unsafe_allow_html=True)
