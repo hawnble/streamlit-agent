@@ -73,9 +73,13 @@ st.markdown("""
 .st-emotion-cache-1pxazr7 {
     display: none;
 }
-.viewerBadge_container__r5tak {
+.viewerBadge_link__qRIco {
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 75 75/var(--tw-bg-opacity));
+    border-top-left-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+    z-index: 10;
     display: none;
-    visibility: hidden;
 }
 </style>
 """, unsafe_allow_html=True)
