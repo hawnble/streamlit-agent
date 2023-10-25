@@ -73,7 +73,7 @@ st.markdown("""
 .st-emotion-cache-1pxazr7 {
     display: none;
 }
- a {
+a {
     display: none;
  }
 """, unsafe_allow_html=True)
