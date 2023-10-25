@@ -62,6 +62,22 @@ st.set_page_config(page_title="Pick-Chat! : Chat with DataFrame!", page_icon=im_
 st.image(im_logo)
 #st.title("Pick-Chat! : Chat with DataFrame!") #🦜 
 
+st.markdown("""
+<style>
+.st-emotion-cache-18ni7ap {
+    position: fixed;
+    top: 0px;
+    #left: 0px;
+    #right: 0px;
+    height: 2.875rem;
+    background: rgb(255, 255, 255);
+    outline: none;
+    z-index: 999990;
+    display: block;
+}
+</style>
+""", unsafe_allow_html=True)
+
 @st.cache_data
 def load_data(url):
     df = pd.read_csv(url)
