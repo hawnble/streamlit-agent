@@ -73,11 +73,14 @@ st.markdown("""
 .st-emotion-cache-1pxazr7 {
     display: none;
 }
-MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-
 """, unsafe_allow_html=True)
-
+hide_streamlit_style = """
+            <style>
+            [data-testid="stToolbar"] {visibility: hidden !important;}
+            footer {visibility: hidden !important;}
+            </style>
+            """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 @st.cache_data
 def load_data(url):
     df = pd.read_csv(url)
