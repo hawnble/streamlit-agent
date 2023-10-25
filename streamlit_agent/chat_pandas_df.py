@@ -73,17 +73,10 @@ st.markdown("""
 .st-emotion-cache-1pxazr7 {
     display: none;
 }
-[class="viewerBadge_link__qRIco"] {
-    visibility: hidden;
+.__web-inspector-hide-shortcut__, .__web-inspector-hide-shortcut__ *, .__web-inspector-hidebefore-shortcut__::before, .__web-inspector-hideafter-shortcut__::after {
+    visibility: hidden !important;
 }
-.viewerBadge_link__qRIco {
-    display: none;
-    --tw-bg-opacity: 0;
-    background-color: rgb(255 75 75/var(--tw-bg-opacity));
-    border-top-left-radius: 0.5rem;
-    padding: 0rem 0rem;
-    z-index: 10;
-}
+
 </style>
 """, unsafe_allow_html=True)
 
