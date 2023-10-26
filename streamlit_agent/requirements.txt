@@ -1,9 +1,9 @@
-matplotlib
-pandas
+#matplotlib
+#pandas
 langchain
 openai
 langchain_experimental
-transformers
+#transformers
 tabulate
-sentence-transformers
+#sentence-transformers
 openpyxl
