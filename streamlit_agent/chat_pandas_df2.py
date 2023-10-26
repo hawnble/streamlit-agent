@@ -30,7 +30,7 @@ def do_stuff_on_page_load():
     st.set_page_config(layout="wide", page_title="Pick-Chat! : Chat with DataFrame!", page_icon=im_symbol)#
 do_stuff_on_page_load()
 
-col1, col2 = st.beta_columns([3,1])
+col1, col2 = st.columns([3, 1])
 with col1:
 #st.set_page_config(layout="wide", page_title="Pick-Chat! : Chat with DataFrame!", page_icon=im_symbol)#
 st.image(im_logo)
