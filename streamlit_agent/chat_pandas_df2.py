@@ -210,7 +210,11 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
             # here is the key, setup a empty container first
             chat_box=st.empty()
             stream_handler = StreamHandler(chat_box)
-    
+
+            st.image(f'output_images/{df_s.loc[0,'No']}.png')
+            st.image(f'output_images/{df_s.loc[1,'No']}.png')
+            st.image(f'output_images/{df_s.loc[2,'No']}.png')
+            
             # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
             response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler])
     
@@ -247,11 +251,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
             # here is the key, setup a empty container first
             chat_box=st.empty()
             stream_handler = StreamHandler(chat_box)
-
-            st.image(f'output_images/{df_s.loc[0,'No']}.png')
-            st.image(f'output_images/{df_s.loc[1,'No']}.png')
-            st.image(f'output_images/{df_s.loc[2,'No']}.png')
-            
+           
             # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
             response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler])
     
