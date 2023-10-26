@@ -81,6 +81,7 @@ df.pop('Unnamed: 0')
 
 #예
 examples = [
+  {"input": "good_price", "output": "df_filtered = df[(df['Value_for_Money_Point'] >= df['Value_for_Money_Point'].quantile(0.75))]\ndf_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"},
   {"input": "new&light", "output": "df_filtered = df[(df['CPU_Launch_Date'] >= 2023) & (df['inch_per_kg'] >= 13)]\ndf_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"},
   {"input": "new&high_performance", "output": "df_filtered = df[(df['CPU_Launch_Date'] >= 2023) & (df['CPU_Score'] >= df['CPU_Score'].quantile(0.75)) & (df['GPU_Score'] >= df['GPU_Score'].quantile(0.75))]\ndf_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"},
   {"input": "new&good_display", "output": "df_filtered = df[(df['CPU_Launch_Date'] >= 2023) & (df['Display_Point'] >= df['Display_Point'].quantile(0.80))]\ndf_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"},
