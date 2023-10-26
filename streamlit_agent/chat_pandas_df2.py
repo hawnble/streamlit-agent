@@ -130,7 +130,14 @@ def filter_and_select_laptops(df, first_query, num_items=3):
 
     return df_sorted
 
-
+fast = (df['CPU_Score'] >= 20000)
+new = (df['CPU_Launch_Date'] >= 2023.01)
+light = (df['inch_per_kg'] >= 9)
+performance = (df['CPU_Score'] >= df['CPU_Score'].quantile(0.74)) & (df['GPU_Score'] >= df['GPU_Score'].quantile(0.74))
+display = (df['Display_Point'] >= df['Display_Point'].quantile(0.74))
+AS = df['Manufacturer'].isin(['SAMSUNG', 'LG'])
+large = (df['inch'] >= 15)
+pd_charge = (df['PD충전'] == 'USB-PD')
 
 #예
 examples = [
@@ -154,26 +161,6 @@ prefix_text = f'''너는 노트북을 전문적으로 추천해주는 챗봇 Pic
 단 질문에 대한 데이터프레임에 적용하는 코드는 아래와 같이 작성해야해
 {examples}
 '''
-   
-# # SemanticSimilarityExampleSelector는 의미론적 의미에 따라 입력과 유사한 예제를 선택합니다.
-# example_selector = SemanticSimilarityExampleSelector.from_examples(
-#   examples,
-#   OpenAIEmbeddings(openai_api_key=openai_api_key),  # 의미적 유사성을 측정하는 데 사용되는 임베딩을 생성하는 데 사용되는 임베딩 클래스입니다.
-#   FAISS,  # 임베딩을 저장하고 유사성 검색을 수행하는 데 사용되는 VectorStore 클래스입니다.
-#   k=1 # 생성할 예제 개수입니다.
-# )
-
-# similar_prompt = FewShotPromptTemplate(
-#   example_selector=example_selector,  # 예제 선택에 도움이 되는 개체
-#   example_prompt=example_prompt,  # 프롬프트
-#   prefix=prefix_text,  # 프롬프트의 상단과 하단에 추가되는 사용자 지정 사항
-#   suffix="Input: {noun}\nOutput:",
-#   input_variables=["noun"],  # 프롬프트가 수신할 입력 항목
-# )
-
-# similar_prompt.format(noun=input('')
-
-
 # OpenAI API 키 입력을 받습니다.
 openai_api_key = st.secrets["openai_key"]
 
