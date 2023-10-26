@@ -215,8 +215,8 @@ with col1:
                 stream_handler = StreamHandler(chat_box)
     
                 col2.image(f'output_images/{df_s.loc[0, "No"]}.png', width = 200);
-                col2..image(f'output_images/{df_s.loc[1, "No"]}.png', width = 200);
-                col2..image(f'output_images/{df_s.loc[2, "No"]}.png', width = 200)
+                col2.image(f'output_images/{df_s.loc[1, "No"]}.png', width = 200);
+                col2.image(f'output_images/{df_s.loc[2, "No"]}.png', width = 200)
                 
                 # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
                 response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler])
