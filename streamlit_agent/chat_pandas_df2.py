@@ -198,7 +198,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
             verbose=True,
             agent_type=AgentType.OPENAI_FUNCTIONS,
             handle_parsing_errors=True,
-            prefix = '''너는 dataframe의 모든 노트북을 바로 설명해주는 챗봇 Pick-Chat!이야. 
+            prefix = '''너는 dataframe의 모든 노트북을 설명해주는 챗봇 Pick-Chat!이야. 질문하지말고 바로 3개 설명해.
 제품마다 가격과 무게와 화면크기와 추천이유를 말하고 줄바꿈을 해줘. 
 다른 정보는 요청시에만 제공해. 
 한글로 답변을 작성해. 
