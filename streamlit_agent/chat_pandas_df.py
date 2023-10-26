@@ -5,12 +5,11 @@ from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
 
-from langchain.prompts.example_selector import
-SemanticSimilarityExampleSelector
-from langchain.vectorstores import FAISS
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.prompts import FewShotPromptTemplate, PromptTemplate
-from langchain.llms import OpenAI
+# from langchain.prompts.example_selector import SemanticSimilarityExampleSelector
+# from langchain.vectorstores import FAISS
+# from langchain.embeddings import OpenAIEmbeddings
+# from langchain.prompts import FewShotPromptTemplate, PromptTemplate
+# from langchain.llms import OpenAI
 
 #from streamlit_chat import message
 import streamlit as st
