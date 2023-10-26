@@ -128,7 +128,7 @@ def filter_and_select_laptops(df, first_query, num_items=3):
     else:
         df_sorted = pd.DataFrame()
 
-    return df_sorted
+    return df_sorted.reset_index(drop=True)
 
 fast = (df['CPU_Score'] >= 20000)
 new = (df['CPU_Launch_Date'] >= 2023.01)
