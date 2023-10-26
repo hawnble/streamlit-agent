@@ -4,6 +4,14 @@ from langchain_experimental.agents.agent_toolkits.pandas.base import create_pand
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
+
+from langchain.prompts.example_selector import
+SemanticSimilarityExampleSelector
+from langchain.vectorstores import FAISS
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.prompts import FewShotPromptTemplate, PromptTemplate
+from langchain.llms import OpenAI
+
 #from streamlit_chat import message
 import streamlit as st
 import pandas as pd
@@ -29,22 +37,7 @@ im_symbol = Image.open("symbol.png")
 def clear_submit():
     st.session_state["submit"] = False
 
-# 데이터를 로드하는 함수를 정의합니다. (캐싱 설정: 2시간)
-# @st.cache_data(ttl="2h")
-# def load_data(uploaded_file):
-#     try:
-#         # 파일 확장자 추출
-#         ext = os.path.splitext(uploaded_file.name)[1][1:].lower()
-#     except:
-#         ext = uploaded_file.split(".")[-1]
 
-#     # 파일 형식에 따라 적절한 함수로 데이터를 로드합니다.
-#     if ext in file_formats:
-#         return file_formats[ext](uploaded_file)
-#     else:
-#         # 지원하지 않는 파일 형식일 경우 에러 메시지 출력
-#         st.error(f"Unsupported file format: {ext}")
-#         return None
 
 
 class StreamHandler(BaseCallbackHandler):
@@ -87,60 +80,53 @@ df = load_data("laptop_sdf_231026.xlsx")
 df.pop('Unnamed: 0')
 #df
 
+#예
+examples = [
+  {"input": "new light", "output": "df_filtered = df[(df['CPU_Launch_Date'] >= 2023) & (df['inch_per_kg'] >= 13)]\ndf_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"},
+  {"input": "new high_performance", "output": "df_filtered = df[(df['CPU_Launch_Date'] >= 2023) & (df['CPU_Score'] >= df['CPU_Score'].quantile(0.75)) & (df['GPU_Score'] >= df['GPU_Score'].quantile(0.75))]\ndf_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"},
+  {"input": "new good_display", "output": "df_filtered = df[(df['CPU_Launch_Date'] >= 2023) & (df['Display_Point'] >= df['Display_Point'].quantile(0.80))]\ndf_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"},
+  {"input": "new good_service", "output": "df_filtered = df[(df['Manufacturer'].isin(['SAMSUNG', 'LG'])) & (df['CPU_Launch_Date'] >= 2023)]\ndf_sorted = df_filtered.sort_values(by=['Value_for_Money_Point', 'Price_won'], ascending=[False, True]).head(5)"},
+  {"input": "light high_performance", "output": "df_filtered = df[(df['inch_per_kg'] >= df['inch_per_kg'].quantile(0.74)) & (df['CPU_Score'] >= df['CPU_Score'].median()) & (df['GPU_Score'] >= df['GPU_Score'].median())]\ndf_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"},
+  {"input": "good_display light", "output": "df_filtered = df[(df['Display_Point'] >= df['Display_Point'].quantile(0.85)) & (df['inch_per_kg'] >= df['inch_per_kg'].quantile(0.74))]\ndf_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"},
+  {"input": "light good_service", "output": "df_filtered = df[df['Manufacturer'].isin(['SAMSUNG', 'LG']) & (df['inch_per_kg'] >= df['inch_per_kg'].quantile(0.74))]\ndf_sorted = df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(3, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"},
+  {"input": "good_display high_performance", "output": "df_filtered = df[(df['Display_Point'] >= df['Display_Point'].quantile(0.90)) & (df['CPU_Score'] >= df['CPU_Score'].quantile(0.90)) & (df['GPU_Score'] >= df['GPU_Score'].quantile(0.90))]\ndf_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"},
+  {"input": "good_service high_performance", "output": "df_filtered = df[df['Manufacturer'].isin(['SAMSUNG', 'LG']) & (df['CPU_Score'] >= 20000)]\ndf_sorted = df_filtered.sort_values(by=['Value_Point', 'Price_won'], ascending=[False, True]).head(5)"},
+  {"input": "good_display good_service", "output": "df_filtered = df[(df['Manufacturer'].isin(['SAMSUNG', 'LG'])) & (df['Display_Point'] >= df['Display_Point'].quantile(0.75))]\ndf_sorted = df_filtered.sort_values(by=['Value_for_Money_Point', 'Price_won'], ascending=[False, True]).head(5)"}
+]
 
 prefix_text = f'''너는 노트북을 전문적으로 추천해주는 챗봇 Pick-Chat!이야.
-                가격과 무게와 화면크기와 특징을 말해줘. 다른 정보는 요청시에만 제공해.
-                서로다른제조사로 제품을 최대 5개 추천하고 제품마다 줄바꿈을 해줘.
-                질문에 부합하는 데이터를 찾을 수 없는 경우에는 사용자에게 질문을 더 자세히 작성해달라고 요청해.
-                한글로 답변을 작성해. 하이퍼링크와 외부주소를 작성하면 안되. Display_Point, Value_for_Money_Point, Value_Point 는 공개하지마.
-                단 질문에 대한 데이터프레임에 적용하는 코드는 아래와 같이 작성해야해.
-
-최신형 가벼운 "df_filtered = df[(df['CPU_Launch_Date'] >= 2023) & (df['inch_per_kg'] >= 13)]
-df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
-최신형 고성능 "df_filtered = df[(df['CPU_Launch_Date'] >= 2023) & (df['CPU_Score'] >= df['CPU_Score'].quantile(0.75)) & (df['GPU_Score'] >= df['GPU_Score'].quantile(0.75))]
-df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
-최신형 화면좋은 "df_filtered = df[(df['CPU_Launch_Date'] >= 2023) & (df['Display_Point'] >= df['Display_Point'].quantile(0.80))]
-df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
-최신형 as잘되는 "df_filtered = df[(df['Manufacturer'].isin(['SAMSUNG', 'LG'])) & (df['CPU_Launch_Date'] >= 2023)]
-df_sorted = df_filtered.sort_values(by=['Value_for_Money_Point', 'Price_won'], ascending=[False, True]).head(5)"
-가볍고 성능좋은 "df_filtered = df[(df['inch_per_kg'] >= df['inch_per_kg'].quantile(0.74)) & (df['CPU_Score'] >= df['CPU_Score'].median()) & (df['GPU_Score'] >= df['GPU_Score'].median())]
-df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
-화면이좋고 가벼운 "df_filtered = df[(df['Display_Point'] >= df['Display_Point'].quantile(0.85)) & (df['inch_per_kg'] >= df['inch_per_kg'].quantile(0.74))]
-df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
-가볍고 as잘되는 "df_filtered = df[df['Manufacturer'].isin(['SAMSUNG', 'LG']) & (df['inch_per_kg'] >= df['inch_per_kg'].quantile(0.74))]
-df_sorted = df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(3, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
-화면좋고 성능훌륭한 "df_filtered = df[(df['Display_Point'] >= df['Display_Point'].quantile(0.90)) & (df['CPU_Score'] >= df['CPU_Score'].quantile(0.90)) & (df['GPU_Score'] >= df['GPU_Score'].quantile(0.90))]
-df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
-as도잘되고 성능도훌륭한 "df_filtered = df[df['Manufacturer'].isin(['SAMSUNG', 'LG']) & (df['CPU_Score'] >= 20000)]
-df_sorted = df_filtered.sort_values(by=['Value_Point', 'Price_won'], ascending=[False, True]).head(5)"
-화면좋고 as 잘되는 "df_filtered = df[(df['Manufacturer'].isin(['SAMSUNG', 'LG'])) & (df['Display_Point'] >= df['Display_Point'].quantile(0.75))]
-df_sorted = df_filtered.sort_values(by=['Value_for_Money_Point', 'Price_won'], ascending=[False, True]).head(5)"
+가격과 무게와 화면크기와 추천이유를 말해줘. 다른 정보는 요청시에만 제공해.
+서로다른제조사로 제품을 최대 5개 추천하고 제품마다 줄바꿈을 해줘.
+질문에 부합하는 데이터를 찾을 수 없는 경우에는 사용자에게 질문을 더 자세히 작성해달라고 요청해.
+한글로 답변을 작성해. 하이퍼링크와 외부주소를 작성하면 안되. Display_Point, Value_for_Money_Point, Value_Point 는 공개하지마.
+단 질문에 대한 데이터프레임에 적용하는 코드는 아래와 같이 작성해야해
+{examples[:]}
 '''
+   
+# SemanticSimilarityExampleSelector는 의미론적 의미에 따라 입력과 유사한 예제를 선택합니다.
+example_selector = SemanticSimilarityExampleSelector.from_examples(
+  examples,
+  OpenAIEmbeddings(openai_api_key=openai_api_key),  # 의미적 유사성을 측정하는 데 사용되는 임베딩을 생성하는 데 사용되는 임베딩 클래스입니다.
+  FAISS,  # 임베딩을 저장하고 유사성 검색을 수행하는 데 사용되는 VectorStore 클래스입니다.
+  k=1 # 생성할 예제 개수입니다.
+)
 
-# # 파일 업로드 위젯을 생성합니다.
-# uploaded_file = st.file_uploader(
-#     "Upload a Data file",
-#     type=list(file_formats.keys()),
-#     help="Various File formats are Support",
-#     on_change=clear_submit,
-# )
+similar_prompt = FewShotPromptTemplate(
+  example_selector=example_selector,  # 예제 선택에 도움이 되는 개체
+  example_prompt=example_prompt,  # 프롬프트
+  prefix=prefix_text,  # 프롬프트의 상단과 하단에 추가되는 사용자 지정 사항
+  suffix="Input: {noun}\nOutput:",
+  input_variables=["noun"],  # 프롬프트가 수신할 입력 항목
+)
 
-# # 파일이 업로드되지 않았을 때 경고 메시지를 표시합니다.
-# if not uploaded_file:
-#     st.warning(
-#         "This app uses LangChain's `PythonAstREPLTool` which is vulnerable to arbitrary code execution. Please use caution in deploying and sharing this app."
-#     )
+similar_prompt.format(noun=input('')
 
-# # 파일이 업로드된 경우 데이터를 로드합니다.
-# if uploaded_file:
-#     df = load_data(uploaded_file)
-
-intro = f'{len(df)}개의 노트북이 있어요! 질문을 상세히 작성해 주시면 알맞는 제품을 찾아드릴게요!'
 
 # OpenAI API 키 입력을 받습니다.
-#openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 openai_api_key = st.secrets["openai_key"]
+
 # 대화 기록을 초기화하거나 버튼을 눌러 대화 기록을 삭제합니다.
+intro = f'{len(df)}개의 노트북이 있어요! 질문을 상세히 작성해 주시면 알맞는 제품을 찾아드릴게요!'
 if "messages" not in st.session_state or st.button("Clear conversation history"):# 
     # 초기 대화 메시지 설정
     st.session_state["messages"] = [{"role": "assistant", "content": intro }]
@@ -168,7 +154,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
     pandas_df_agent = create_pandas_dataframe_agent(
         llm,
         df,
-        verbose=True,
+        verbose=False,
         agent_type=AgentType.OPENAI_FUNCTIONS,
         handle_parsing_errors=True,
         prefix = prefix_text,
