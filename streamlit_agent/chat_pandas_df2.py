@@ -210,6 +210,43 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
             # here is the key, setup a empty container first
             chat_box=st.empty()
             stream_handler = StreamHandler(chat_box)
+    
+            # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
+            response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler])
+    
+            # Assistant의 응답을 대화 기록에 추가하고 출력합니다.
+            st.session_state.messages.append({"role": "assistant", "content": response})
+            #st.write(response)
+            # st.markdown(response)
+
+    elif len(df_s) >= 1 and len(st.session_state.messages) > 2:
+        # OpenAI 모델 설정 및 실행
+        if not openai_api_key:
+            st.info("Please add your OpenAI API key to continue.")
+            st.stop()
+    
+        # ChatOpenAI 모델 초기화 및 설정
+        llm = ChatOpenAI(
+            temperature=0.25, model="gpt-4", openai_api_key=openai_api_key, streaming=True
+        )
+    
+        # LangChain을 사용하여 pandas DataFrame 에이전트 생성 및 실행
+        pandas_df_agent = create_pandas_dataframe_agent(
+            llm,
+            df_s,
+            verbose=False,
+            agent_type=AgentType.OPENAI_FUNCTIONS,
+            handle_parsing_errors=True,
+            prefix = prefix_text,
+        )
+    
+        # Assistant 역할로 채팅 메시지를 표시합니다.
+        with st.chat_message("assistant"):
+    
+            st.markdown("### Pick-Chat!")
+            # here is the key, setup a empty container first
+            chat_box=st.empty()
+            stream_handler = StreamHandler(chat_box)
             # chat = ChatOpenAI(max_tokens=25, streaming=True, callbacks=[stream_handler])
             # st.markdown("### together box")
     
@@ -223,7 +260,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
             st.session_state.messages.append({"role": "assistant", "content": response})
             #st.write(response)
             # st.markdown(response)
-            
+    
     else:
         # OpenAI 모델 설정 및 실행
         if not openai_api_key:
@@ -252,12 +289,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
             # here is the key, setup a empty container first
             chat_box=st.empty()
             stream_handler = StreamHandler(chat_box)
-            # chat = ChatOpenAI(max_tokens=25, streaming=True, callbacks=[stream_handler])
-            # st.markdown("### together box")
-    
-            # Streamlit 콜백 핸들러를 생성합니다.
-            #st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
-    
+
             # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
             response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler])
     
