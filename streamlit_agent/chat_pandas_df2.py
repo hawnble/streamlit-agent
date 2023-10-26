@@ -180,7 +180,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
     st.chat_message("user").write(prompt)
 
     df_s = filter_and_select_laptops(df, prompt, num_items=3)
-    if len(df_s) >= 1:
+    if len(df_s) >= 1 and len(st.session_state.messages) == 2:
         # OpenAI 모델 설정 및 실행
         if not openai_api_key:
             st.info("Please add your OpenAI API key to continue.")
