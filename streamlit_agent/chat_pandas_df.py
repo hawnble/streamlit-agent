@@ -58,7 +58,10 @@ class StreamHandler(BaseCallbackHandler):
         self.container.markdown(self.text)
 
 # Streamlit 페이지 설정
-st.set_page_config(page_title="Pick-Chat! : Chat with DataFrame!", page_icon=im_symbol)#
+def do_stuff_on_page_load(...):
+    st.set_page_config(layout="wide", page_title="Pick-Chat! : Chat with DataFrame!", page_icon=im_symbol)#
+    ...
+#st.set_page_config(layout="wide", page_title="Pick-Chat! : Chat with DataFrame!", page_icon=im_symbol)#
 st.image(im_logo)
 #st.title("Pick-Chat! : Chat with DataFrame!") #🦜 
 
