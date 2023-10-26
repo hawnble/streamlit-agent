@@ -203,7 +203,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
 다른 정보는 요청시에만 제공해. 
 한글로 답변을 작성해. 
 하이퍼링크와 외부주소를 작성하면 안되. 
-Display_Point, Value_for_Money_Point, Value_Point 는 공개하지마.'''
+Display_Point, Value_for_Money_Point, Value_Point 는 절대 공개하지마.'''
         )
     
         # Assistant 역할로 채팅 메시지를 표시합니다.
