@@ -55,7 +55,7 @@ df = load_data("laptop_sdf_231026.xlsx")
 #df = df.astype(str)
 df.pop('Unnamed: 0')
 #df
-st.image(f'output_images/{df.loc[0, "No"]}.png')
+
 def filter_and_select_laptops(df, first_query, num_items=3):
     # 데이터프레임 복사
     df_filtered = df.copy()  # 초기 데이터프레임으로 시작
