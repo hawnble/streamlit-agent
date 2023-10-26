@@ -224,7 +224,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
         if not openai_api_key:
             st.info("Please add your OpenAI API key to continue.")
             st.stop()
-    
+
         # ChatOpenAI 모델 초기화 및 설정
         llm = ChatOpenAI(
             temperature=0.25, model="gpt-4", openai_api_key=openai_api_key, streaming=True
@@ -247,12 +247,11 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
             # here is the key, setup a empty container first
             chat_box=st.empty()
             stream_handler = StreamHandler(chat_box)
-            # chat = ChatOpenAI(max_tokens=25, streaming=True, callbacks=[stream_handler])
-            # st.markdown("### together box")
-    
-            # Streamlit 콜백 핸들러를 생성합니다.
-            #st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
-    
+
+            st.image(f'output_images/{df_s.loc[0,'No']}.png')
+            st.image(f'output_images/{df_s.loc[1,'No']}.png')
+            st.image(f'output_images/{df_s.loc[2,'No']}.png')
+            
             # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
             response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler])
     
