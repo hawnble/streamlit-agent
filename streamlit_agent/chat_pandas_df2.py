@@ -154,7 +154,7 @@ examples = [
   {"input": "good_display&good_service", "output": "df_filtered = df[(df['Manufacturer'].isin(['SAMSUNG', 'LG'])) & (df['Display_Point'] >= df['Display_Point'].quantile(0.75))]\ndf_sorted = df_filtered.sort_values(by=['Value_for_Money_Point', 'Price_won'], ascending=[False, True]).reset_index(drop=True).head(3)"}
 ]
 prefix_text = f'''너는 노트북을 전문적으로 추천해주는 챗봇 Pick-Chat!이야.
-가격과 무게와 화면크기와 추천이유를 말해줘. 다른 정보는 요청시에만 제공해.
+가격과 무게와 화면크기와 추천이유를 말해줘.
 서로다른제조사로 제품을 최대 3개 추천하고 제품마다 줄바꿈을 해줘.
 질문에 부합하는 데이터를 찾을 수 없는 경우에는 사용자에게 질문을 더 자세히 작성해달라고 요청해.
 한글로 답변을 작성해. 하이퍼링크와 외부주소를 작성하면 안되. Display_Point, Value_for_Money_Point, Value_Point 는 공개하지마.
