@@ -99,7 +99,7 @@ prefix_text = f'''너는 노트북을 전문적으로 추천해주는 챗봇 Pic
 질문에 부합하는 데이터를 찾을 수 없는 경우에는 사용자에게 질문을 더 자세히 작성해달라고 요청해.
 한글로 답변을 작성해. 하이퍼링크와 외부주소를 작성하면 안되. Display_Point, Value_for_Money_Point, Value_Point 는 공개하지마.
 단 질문에 대한 데이터프레임에 적용하는 코드는 아래와 같이 작성해야해
-{examples[:]}
+{examples}
 '''
    
 # # SemanticSimilarityExampleSelector는 의미론적 의미에 따라 입력과 유사한 예제를 선택합니다.
