@@ -98,6 +98,8 @@ prefix_text = f'''너는 노트북을 전문적으로 추천해주는 챗봇 Pic
 
 최신형 가벼운 노트북	"df_filtered = df[(df['CPU_Launch_Date'] >= 2023) & (df['inch_per_kg'] >= 13)]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_for_Money_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
+for i in range(len(df_sortred)):    
+    st.image(f'output_images/{df_sorted[i,'No']}.png')
 최신형 고성능 노트북	"df_filtered = df[(df['CPU_Launch_Date'] >= 2023) & (df['CPU_Score'] >= df['CPU_Score'].quantile(0.75)) & (df['GPU_Score'] >= df['GPU_Score'].quantile(0.75))]
 df_sorted = df_filtered.groupby('Manufacturer').apply(lambda x: x.nlargest(1, 'Value_Point')).reset_index(drop=True).sort_values(by='Price_won', ascending=True).head(5)"
 최신형 화면 좋은 노트북	"df_filtered = df[(df['CPU_Launch_Date'] >= 2023) & (df['Display_Point'] >= df['Display_Point'].quantile(0.80))]
