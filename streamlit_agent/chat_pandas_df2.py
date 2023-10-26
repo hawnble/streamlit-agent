@@ -55,7 +55,7 @@ df = load_data("laptop_sdf_231026.xlsx")
 #df = df.astype(str)
 df.pop('Unnamed: 0')
 #df
-st.image(f'output_images/{df.loc[0,'No']}.png')
+st.image(f'output_images/{df.loc[0, "No"]}.png')
 def filter_and_select_laptops(df, first_query, num_items=3):
     # 데이터프레임 복사
     df_filtered = df.copy()  # 초기 데이터프레임으로 시작
@@ -211,9 +211,9 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
             chat_box=st.empty()
             stream_handler = StreamHandler(chat_box)
 
-            st.image(f'output_images/{df_s.loc[0,'No']}.png')
-            st.image(f'output_images/{df_s.loc[1,'No']}.png')
-            st.image(f'output_images/{df_s.loc[2,'No']}.png')
+            st.image(f'output_images/{df_s.loc[0, "No"]}.png')
+            st.image(f'output_images/{df_s.loc[1, "No"]}.png')
+            st.image(f'output_images/{df_s.loc[2, "No"]}.png')
             
             # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
             response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler])
