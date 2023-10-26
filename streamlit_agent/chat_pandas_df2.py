@@ -224,7 +224,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
             #st.write(response)
             # st.markdown(response)
             
-    elif len(df_s) == 0:
+    else:
         # OpenAI 모델 설정 및 실행
         if not openai_api_key:
             st.info("Please add your OpenAI API key to continue.")
@@ -238,7 +238,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
         # LangChain을 사용하여 pandas DataFrame 에이전트 생성 및 실행
         pandas_df_agent = create_pandas_dataframe_agent(
             llm,
-            df,
+            df, df_s,
             verbose=False,
             agent_type=AgentType.OPENAI_FUNCTIONS,
             handle_parsing_errors=True,
