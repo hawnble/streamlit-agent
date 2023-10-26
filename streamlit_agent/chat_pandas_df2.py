@@ -29,6 +29,9 @@ class StreamHandler(BaseCallbackHandler):
 def do_stuff_on_page_load():
     st.set_page_config(layout="wide", page_title="Pick-Chat! : Chat with DataFrame!", page_icon=im_symbol)#
 do_stuff_on_page_load()
+
+col1, col2 = st.beta_columns([3,1])
+with col1:
 #st.set_page_config(layout="wide", page_title="Pick-Chat! : Chat with DataFrame!", page_icon=im_symbol)#
 st.image(im_logo)
 #st.title("Pick-Chat! : Chat with DataFrame!") #🦜 
@@ -211,7 +214,9 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
             chat_box=st.empty()
             stream_handler = StreamHandler(chat_box)
 
-            st.image(f'output_images/{df_s.loc[0, "No"]}.png', width = 100);st.image(f'output_images/{df_s.loc[1, "No"]}.png', width = 100);st.image(f'output_images/{df_s.loc[2, "No"]}.png', width = 100)
+            col2.image(f'output_images/{df_s.loc[0, "No"]}.png', width = 200);
+            col2..image(f'output_images/{df_s.loc[1, "No"]}.png', width = 200);
+            col2..image(f'output_images/{df_s.loc[2, "No"]}.png', width = 200)
             
             # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
             response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler])
