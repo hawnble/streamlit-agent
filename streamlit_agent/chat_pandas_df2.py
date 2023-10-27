@@ -219,7 +219,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
             #st.image(f'output_images/{df_s.loc[2, "No"]}.png', width = 200)
             
             # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
-            response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler])
+            response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler]).replace("{", "").replace("}", "").replace(":", "")
     
             # Assistant의 응답을 대화 기록에 추가하고 출력합니다.
             st.session_state.messages.append({"role": "assistant", "content": response})
@@ -241,7 +241,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
         pandas_df_agent = create_pandas_dataframe_agent(
             llm,
             df_s,
-            verbose=False,
+            verbose=True,
             agent_type=AgentType.OPENAI_FUNCTIONS,
             handle_parsing_errors=True,
             prefix = prefix_text,
@@ -256,7 +256,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
             stream_handler = StreamHandler(chat_box)
            
             # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
-            response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler])
+            response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler]).replace("{", "").replace("}", "").replace(":", "")
     
             # Assistant의 응답을 대화 기록에 추가하고 출력합니다.
             st.session_state.messages.append({"role": "assistant", "content": response})
@@ -293,7 +293,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
             stream_handler = StreamHandler(chat_box)
 
             # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
-            response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler])
+            response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler]).replace("{", "").replace("}", "").replace(":", "")
     
             # Assistant의 응답을 대화 기록에 추가하고 출력합니다.
             st.session_state.messages.append({"role": "assistant", "content": response})
