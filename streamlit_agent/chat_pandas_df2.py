@@ -183,7 +183,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
 
-    df_s = filter_and_select_laptops(df, prompt, num_items=3)
+    df_s = filter_and_select_laptops(df, prompt, num_items=3).head()
     if len(df_s) >= 1 and len(st.session_state.messages) == 2:
         # OpenAI 모델 설정 및 실행
         if not openai_api_key:
@@ -209,7 +209,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
         
         messages = [
         SystemMessage(
-        content=f'''너는 dataframe {df_s}의 노트북을 설명해주는 챗봇 Pick-Chat!이야. 고민없이 바로 설명해.
+        content=f'''너는 dataframe {df_s}의 모든 노트북을 설명해주는 챗봇 Pick-Chat!이야.
 제품마다 가격과 무게와 화면크기와 추천이유를 꼭 말하고 줄바꿈을 해줘.
 반드시 한글로 작성해. '''
         ),
@@ -231,8 +231,8 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
             #st.image(f'output_images/{df_s.loc[2, "No"]}.png', width = 200)
             
             # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
-            #response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler]).replace("{", "").replace("}", "").replace(":", "")
-            response = llm_t(messages, callbacks=[stream_handler]).replace("{", "").replace("}", "").replace(":", "")
+            #response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler])
+            response = llm_t(messages, callbacks=[stream_handler])
             # Assistant의 응답을 대화 기록에 추가하고 출력합니다.
             st.session_state.messages.append({"role": "assistant", "content": response})
             #st.write(response)
@@ -268,7 +268,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
             stream_handler = StreamHandler(chat_box)
            
             # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
-            response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler]).replace("{", "").replace("}", "").replace(":", "")
+            response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler])
     
             # Assistant의 응답을 대화 기록에 추가하고 출력합니다.
             st.session_state.messages.append({"role": "assistant", "content": response})
@@ -305,7 +305,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
             stream_handler = StreamHandler(chat_box)
 
             # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
-            response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler]).replace("{", "").replace("}", "").replace(":", "")
+            response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler])
     
             # Assistant의 응답을 대화 기록에 추가하고 출력합니다.
             st.session_state.messages.append({"role": "assistant", "content": response})
