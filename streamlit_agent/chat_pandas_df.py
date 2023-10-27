@@ -174,7 +174,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
         #st_cb = StreamlitCallbackHandler(st.container(), expand_new_thoughts=False)
 
         # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
-        response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler])
+        response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler]).replace("{", "").replace("}", "").replace(":", "")
 
         # Assistant의 응답을 대화 기록에 추가하고 출력합니다.
         st.session_state.messages.append({"role": "assistant", "content": response})
