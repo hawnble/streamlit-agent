@@ -179,7 +179,7 @@ for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
 
 # 사용자 입력을 처리합니다.
-if prompt := st.chat_input(placeholder="가벼운 게이밍 노트북 3개 추천해줘줘!"):
+if prompt := st.chat_input(placeholder="가벼운 게이밍 노트북 3개 추천해줘!"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
 
