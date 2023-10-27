@@ -2,6 +2,7 @@ from langchain.agents import AgentType
 from langchain_experimental.agents.agent_toolkits.pandas.base import create_pandas_dataframe_agent
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import ChatOpenAI
+from langchain.schema import AIMessage, HumanMessage, SystemMessage
 
 import streamlit as st
 import pandas as pd
@@ -190,13 +191,13 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
             st.stop()
     
         # ChatOpenAI 모델 초기화 및 설정
-        llm = ChatOpenAI(
+        llm_t = ChatOpenAI(
             temperature=0.24, model="gpt-3.5-turbo", openai_api_key=openai_api_key, streaming=True
         )
     
         # LangChain을 사용하여 pandas DataFrame 에이전트 생성 및 실행
         pandas_df_agent = create_pandas_dataframe_agent(
-            llm,
+            llm_t,
             df_s,
             verbose=True,
             agent_type=AgentType.OPENAI_FUNCTIONS,
@@ -205,7 +206,18 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
 제품마다 가격과 무게와 화면크기와 추천이유를 꼭 말하고 줄바꿈을 해줘.
 반드시 한글로 작성해. '''
         )
-    
+        
+        messages = [
+        SystemMessage(
+        content=f'''너는 dataframe {df_s}의 노트북을 설명해주는 챗봇 Pick-Chat!이야. 고민없이 바로 설명해.
+제품마다 가격과 무게와 화면크기와 추천이유를 꼭 말하고 줄바꿈을 해줘.
+반드시 한글로 작성해. '''
+        ),
+        HumanMessage(
+        content=prompt
+        ),
+        ]
+                
         # Assistant 역할로 채팅 메시지를 표시합니다.
         with st.chat_message("assistant"):
     
@@ -219,8 +231,8 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
             #st.image(f'output_images/{df_s.loc[2, "No"]}.png', width = 200)
             
             # LangChain을 사용하여 대화를 진행하고 응답을 받습니다.
-            response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler]).replace("{", "").replace("}", "").replace(":", "")
-    
+            #response = pandas_df_agent.run(st.session_state.messages, callbacks=[stream_handler]).replace("{", "").replace("}", "").replace(":", "")
+            response = llm_t(messages, callbacks=[stream_handler]).replace("{", "").replace("}", "").replace(":", "")
             # Assistant의 응답을 대화 기록에 추가하고 출력합니다.
             st.session_state.messages.append({"role": "assistant", "content": response})
             #st.write(response)
