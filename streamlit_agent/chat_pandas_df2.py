@@ -199,7 +199,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
         pandas_df_agent = create_pandas_dataframe_agent(
             llm_t,
             df_s,
-            verbose=True,
+            verbose=False,
             agent_type=AgentType.OPENAI_FUNCTIONS,
             handle_parsing_errors=True,
             prefix = '''너는 dataframe의 노트북을 설명해주는 챗봇 Pick-Chat!이야. 고민없이 바로 설명해.
@@ -253,7 +253,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
         pandas_df_agent = create_pandas_dataframe_agent(
             llm,
             df_s,
-            verbose=True,
+            verbose=False,
             agent_type=AgentType.OPENAI_FUNCTIONS,
             handle_parsing_errors=True,
             prefix = prefix_text,
