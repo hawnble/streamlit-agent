@@ -191,7 +191,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
     
         # ChatOpenAI 모델 초기화 및 설정
         llm = ChatOpenAI(
-            temperature=0, model="gpt-3.5-turbo", openai_api_key=openai_api_key, streaming=True
+            temperature=0.24, model="gpt-3.5-turbo", openai_api_key=openai_api_key, streaming=True
         )
     
         # LangChain을 사용하여 pandas DataFrame 에이전트 생성 및 실행
@@ -201,7 +201,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
             verbose=True,
             agent_type=AgentType.OPENAI_FUNCTIONS,
             handle_parsing_errors=True,
-            prefix = '''너는 dataframe의 모든 노트북을 설명해주는 챗봇 Pick-Chat!이야. 바로 설명해.
+            prefix = '''너는 dataframe의 노트북을 설명해주는 챗봇 Pick-Chat!이야. 고민없이 바로 설명해.
 제품마다 가격과 무게와 화면크기와 추천이유만 말하고 줄바꿈을 해줘.
 반드시 한글로 작성해. '''
         )
