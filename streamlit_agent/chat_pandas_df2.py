@@ -179,7 +179,7 @@ for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
 
 # 사용자 입력을 처리합니다.
-if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄래? 무게는 1.5kg 이하면 좋아!"):
+if prompt := st.chat_input(placeholder="가벼운 게이밍 노트북 3개 추천해줘줘!"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
 
@@ -209,7 +209,7 @@ if prompt := st.chat_input(placeholder="가볍고 빠른 노트북 추천해줄�
         
         messages = [
         SystemMessage(
-        content=f'''너는 dataframe {df_s}의 모든 노트북을 설명해주는 챗봇 Pick-Chat!이야.
+        content=f'''너는 dataframe {df_s}의 노트북을 3개 설명해주는 챗봇 Pick-Chat!이야.
 제품마다 가격과 무게와 화면크기와 추천이유를 꼭 말하고 줄바꿈을 해줘.
 반드시 한글로 작성해. '''
         ),
